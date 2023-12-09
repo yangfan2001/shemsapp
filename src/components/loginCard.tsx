@@ -26,11 +26,11 @@ const LoginCard: React.FC = () => {
     }
     await login(email, password).then((res) => {
       if (res.status === 200) {
-        const { token } = res.data;
+        const { token, first_name } = res.data;
         sessionStorage.setItem('token', token);
-        console.log(token);
+        sessionStorage.setItem('first_name', first_name);;
         setSuccessSnackbar(true);
-        //window.location.href = '/';
+        window.location.href = '/';
       }
     }
     ).catch((err) => {
