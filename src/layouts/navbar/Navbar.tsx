@@ -24,7 +24,7 @@ export default function ButtonAppBar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            New York Restaurant Reservation System
+            Smart Home Energy Management System
           </Typography>
           <Button color="inherit" onClick={()=>
             navigate("/login")
