@@ -1,8 +1,7 @@
 import constants from '../constants';
-import axios from 'axios';
-
+import axiosInstance from './axiosConfig';
 export const login = async (email: string, password: string) => {
-    return await axios.post(`${constants.ENDPOINT_AUTH_URL}/login`, { email, password });
+    return await axiosInstance.post(`${constants.ENDPOINT_AUTH_URL}/login`, { email, password });
 }
 
 
@@ -44,5 +43,5 @@ export const register = async ({
       billing_zipcode: billingZipcode
     };
   
-    return axios.post(`${constants.ENDPOINT_AUTH_URL}/register`, params);
+    return axiosInstance.post(`${constants.ENDPOINT_AUTH_URL}/register`, params);
   };
