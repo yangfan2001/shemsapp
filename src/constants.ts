@@ -4,4 +4,5 @@ export default {
     ENDPOINT_AUTH_URL: `${ENDPOINT_URL}/auth`,
     ENDPOINT_CUSTOMER_URL: `${ENDPOINT_URL}/customer`,
     ENDPOINT_LOCATION_URL: `${ENDPOINT_URL}/location`, 
+    ENDPOINT_DEVICE_URL: `${ENDPOINT_URL}/device`,
 }
