@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import Box from '@mui/material/Box';
-import { login } from '../services/customer';
-import { Snackbar, Alert } from '@mui/material';
+import React, { useState } from "react";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import FormControl from "@mui/material/FormControl";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
+import Box from "@mui/material/Box";
+import { login } from "../services/customer";
+import { Snackbar, Alert } from "@mui/material";
 
 const LoginCard: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [successSnackbar, setSuccessSnackbar] = useState(false);
   const [failSnackbar, setFailSnackbar] = useState(false);
@@ -24,27 +24,37 @@ const LoginCard: React.FC = () => {
       setError(true);
       return;
     }
-    await login(email, password).then((res) => {
-      if (res.status === 200) {
-        const { token, first_name } = res.data;
-        sessionStorage.setItem('token', token);
-        sessionStorage.setItem('first_name', first_name);;
-        setSuccessSnackbar(true);
-        window.location.href = '/';
-      }
-    }
-    ).catch((err) => {
-      setFailSnackbar(true);
-    });
-
-
-
+    await login(email, password)
+      .then((res) => {
+        if (res.status === 200) {
+          const { success, message, token } = res.data;
+          sessionStorage.setItem("token", token);
+          // sessionStorage.setItem('first_name', first_name);
+          sessionStorage.setItem("email", email);
+          setSuccessSnackbar(true);
+          window.location.href = "/";
+        }
+      })
+      .catch((err) => {
+        setFailSnackbar(true);
+      });
   };
 
   return (
-    <Card sx={{ maxWidth: 345, boxShadow: 3, borderRadius: 2, bgcolor: 'background.paper' }}>
+    <Card
+      sx={{
+        maxWidth: 345,
+        boxShadow: 3,
+        borderRadius: 2,
+        bgcolor: "background.paper",
+      }}
+    >
       <CardContent>
-        <Typography variant="h5" component="div" sx={{ textAlign: 'center', fontFamily: 'Arial', fontWeight: 'bold' }}>
+        <Typography
+          variant="h5"
+          component="div"
+          sx={{ textAlign: "center", fontFamily: "Arial", fontWeight: "bold" }}
+        >
           Log In
         </Typography>
         <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
@@ -77,26 +87,49 @@ const LoginCard: React.FC = () => {
           >
             Log In
           </Button>
-          <Typography variant="body2" sx={{ textAlign: 'center' }}>
+          <Typography variant="body2" sx={{ textAlign: "center" }}>
             Don't have an account? <Link href="/register">Register</Link>
           </Typography>
         </Box>
       </CardContent>
 
-      <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        open={successSnackbar} autoHideDuration={1000} onClose={() => { setSuccessSnackbar(false) }}>
-        <Alert onClose={() => { setSuccessSnackbar(false) }} severity="success" sx={{ width: '100%' }}>
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        open={successSnackbar}
+        autoHideDuration={1000}
+        onClose={() => {
+          setSuccessSnackbar(false);
+        }}
+      >
+        <Alert
+          onClose={() => {
+            setSuccessSnackbar(false);
+          }}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
           Login Success!
         </Alert>
       </Snackbar>
 
-      <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        open={failSnackbar} autoHideDuration={5000} onClose={() => { setFailSnackbar(false) }}>
-        <Alert onClose={() => { setFailSnackbar(false) }} severity="error" sx={{ width: '100%' }}>
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        open={failSnackbar}
+        autoHideDuration={5000}
+        onClose={() => {
+          setFailSnackbar(false);
+        }}
+      >
+        <Alert
+          onClose={() => {
+            setFailSnackbar(false);
+          }}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
           Invalid email or password!
         </Alert>
       </Snackbar>
-
     </Card>
   );
 };
