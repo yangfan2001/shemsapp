@@ -45,3 +45,7 @@ export const register = async ({
   
     return axiosInstance.post(`${constants.ENDPOINT_AUTH_URL}/register`, params);
   };
+
+  export const getCustomerInfo = async () => {
+    return axiosInstance.get(`${constants.ENDPOINT_CUSTOMER_URL}/info`);
+  };

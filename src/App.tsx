@@ -1,9 +1,13 @@
 import React from 'react';
 import Layout from './layouts/layout';
+import { SnackbarProvider } from './components/SnackbarProvier';
+
 const App: React.FC = () => {
     return (
         <>
-            <Layout />
+            <SnackbarProvider>
+                <Layout />
+            </SnackbarProvider>
         </>
     );
 }

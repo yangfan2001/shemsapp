@@ -29,10 +29,9 @@ const LoginCard: React.FC = () => {
         if (res.status === 200) {
           const { success, message, token } = res.data;
           sessionStorage.setItem("token", token);
-          // sessionStorage.setItem('first_name', first_name);
           sessionStorage.setItem("email", email);
           setSuccessSnackbar(true);
-          window.location.href = "/";
+          window.location.href = "/account";
         }
       })
       .catch((err) => {
