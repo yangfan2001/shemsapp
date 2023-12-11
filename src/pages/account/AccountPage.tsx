@@ -44,16 +44,19 @@ const AccountInfoPage: React.FC = () => {
     useEffect(() => {
         const fetchCustomerInfo = async () => {
             try {
-                const res = await getCustomerInfo();
+                const [userInfoResponse, locationsResponse] = await Promise.all([
+                    getCustomerInfo(),
+                    getCustomerLocation()
+                ]);
+
                 const newUser = {
-                    ...res.data,
-                    locations:[],
-                    devices:[]
-                }
-                const locations = await getCustomerLocation();
-                console.log(locations);
+                    ...userInfoResponse.data,
+                    locations: locationsResponse.data, // Assuming locationsResponse has data field
+                    devices: [] // Populate this as needed
+                };
+
+                console.log(locationsResponse.data);
                 setUser(newUser as User);
-                // Process the response here
             } catch (error) {
                 console.error('Failed to fetch customer info:', error);
                 showSnackbar('Failed to fetch customer info', 'error');

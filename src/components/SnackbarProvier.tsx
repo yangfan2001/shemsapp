@@ -44,9 +44,6 @@ export const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
     setMessageInfo(undefined);
   };
 
-  const handleExited = () => {
-    setMessageInfo(undefined);
-  };
 
   return (
     <SnackbarContext.Provider value={{ addMessage }}>
