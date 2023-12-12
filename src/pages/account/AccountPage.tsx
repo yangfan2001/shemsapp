@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Paper, TextField, Grid, CircularProgress } from '@mui/material';
+import { Container, Paper, TextField, Grid } from '@mui/material';
 import { User } from './CustomerInfo';
 import { getCustomerInfo } from '../../services/customer';
 import { getCustomerLocation } from '../../services/location';
