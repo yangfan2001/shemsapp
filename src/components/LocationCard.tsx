@@ -33,6 +33,8 @@ interface Props {
   startDate: string;
   monthlyBill: number;
   monthlyEnergy: number;
+  setModifyLocationIndex: (setIndex: number | null) => void;
+  setOpenModifyCard: (open: boolean) => void;
 }
 
 export default function LocationCard(Props: Props) {
@@ -48,8 +50,9 @@ export default function LocationCard(Props: Props) {
     setOpenInfo(!openInfo);
   };
 
-  const handleClickSetting = () => {
-    // handling redirect...
+  const handleClickSetting = (index: number) => {
+    Props.setModifyLocationIndex(index);
+    Props.setOpenModifyCard(true);
   };
 
   const handleClickEnergy = () => {
@@ -157,7 +160,7 @@ export default function LocationCard(Props: Props) {
         <ListItemText primary="Check Energy Usage" />
       </ListItemButton>
 
-      <ListItemButton onClick={() => handleClickSetting()}>
+      <ListItemButton onClick={() => handleClickSetting(Props.locationIndex)}>
         <ListItemIcon>
           <SettingsIcon />
         </ListItemIcon>

@@ -8,22 +8,21 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  FormControl,
-  FormHelperText,
   Grid,
-  InputLabel,
   ListItemButton,
   ListItemIcon,
-  MenuItem,
-  Select,
   Snackbar,
   TextField,
 } from "@mui/material";
-import { Padding, TryRounded } from "@mui/icons-material";
-import { addLocation } from "../services/location";
-import { AddLocationData } from "../constants";
+import { Padding, PortableWifiOffSharp, TryRounded } from "@mui/icons-material";
 
-function AddLocationCard() {
+interface Props {
+  openCard: boolean;
+  modifyIndex: number | null;
+  setOpenModifyCard: (open: boolean) => void;
+}
+
+function ModifyLocationCard(Props: Props) {
   const [addDialog, setAddDialog] = useState(false);
 
   const [streetNum, setStreetNum] = useState("");
@@ -40,85 +39,20 @@ function AddLocationCard() {
   const [failSnackbar, setFailSnackbar] = useState(false);
   const [successSnackbar, setSuccessSnackbar] = useState(false);
 
-  const handleClick = () => {
-    setAddDialog(true);
-  };
-
   const handleClose = () => {
-    setAddDialog(false);
+    Props.setOpenModifyCard(false);
   };
 
-  const handleSumbmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    // data validation
-    event.preventDefault();
-    if (isNaN(Number(streetNum))) {
-      setErrorInfo("Invalid Street Number!");
-      setFailSnackbar(true);
-      return;
-    }
-    if (isNaN(Number(squareFeet))) {
-      setErrorInfo("Invalid Square Feet!");
-      setFailSnackbar(true);
-      return;
-    }
-    if (isNaN(Number(numBed))) {
-      setErrorInfo("Invalid Bedroom Number!");
-      setFailSnackbar(true);
-      return;
-    }
-    if (isNaN(Number(numOccupants))) {
-      setErrorInfo("Invalid Occupant Number!");
-      setFailSnackbar(true);
-      return;
-    }
-    if (isNaN(Number(zipCode)) || zipCode.length != 5) {
-      setErrorInfo("Invalid Zip Code!");
-      setFailSnackbar(true);
-      return;
-    }
-    const postData: AddLocationData = {
-      streetNum: Number(streetNum),
-      streetName: streetName,
-      unitNumber: unitNumber,
-      city: city,
-      state: state,
-      zipCode: zipCode,
-      squareFeet: Number(squareFeet),
-      numBed: Number(numBed),
-      numOccupants: Number(numOccupants),
-    };
-
-    const token = sessionStorage.getItem("token");
-
-    if (token) {
-      await addLocation(postData, token)
-        .then((res) => {
-          setSuccessSnackbar(true);
-          window.location.href = "/location";
-        })
-        .catch((error) => {
-          setFailSnackbar(true);
-        });
-    }
-  };
   return (
     <>
-      <ListItemButton
-        style={{ justifyContent: "center", display: "flex" }}
-        onClick={handleClick}
-      >
-        <ListItemIcon style={{ minWidth: "auto" }}>
-          <AddLocationAltIcon style={{ fontSize: "80" }} />
-        </ListItemIcon>
-      </ListItemButton>
-      <Dialog open={addDialog} onClose={handleClose}>
-        <DialogTitle>Adding My New Location</DialogTitle>
+      <Dialog open={Props.openCard} onClose={handleClose}>
+        <DialogTitle>Modify My Location # {Props.modifyIndex}</DialogTitle>
         <DialogContent>
           <DialogContentText>
             To add new location, please fill out the form and click 'Add
             Location'.
           </DialogContentText>
-          <form onSubmit={handleSumbmit}>
+          <form>
             <Grid container>
               <Grid item xs={6} padding={1}>
                 <TextField
@@ -174,7 +108,7 @@ function AddLocationCard() {
                 />
               </Grid>
               <Grid xs={4} padding={1}>
-                {/* <TextField
+                <TextField
                   margin="dense"
                   required
                   fullWidth
@@ -184,29 +118,7 @@ function AddLocationCard() {
                   onChange={(e) => {
                     setState(e.target.value);
                   }}
-                /> */}
-                <FormControl
-                  variant="standard"
-                  required
-                  sx={{ m: 1, minWidth: 120 }}
-                >
-                  <InputLabel id="state-label">State</InputLabel>
-                  <Select
-                    labelId="state-label"
-                    id="state"
-                    value={state}
-                    label="State *"
-                    onChange={(e) => {
-                      setState(e.target.value);
-                    }}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value="NJ">NJ</MenuItem>
-                    <MenuItem value="NY">NY</MenuItem>
-                  </Select>
-                </FormControl>
+                />
               </Grid>
               <Grid xs={4} padding={1}>
                 <TextField
@@ -274,46 +186,8 @@ function AddLocationCard() {
           </form>
         </DialogContent>
       </Dialog>
-
-      <Snackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        open={failSnackbar}
-        autoHideDuration={5000}
-        onClose={() => {
-          setFailSnackbar(false);
-        }}
-      >
-        <Alert
-          onClose={() => {
-            setFailSnackbar(false);
-          }}
-          severity="error"
-          sx={{ width: "100%" }}
-        >
-          {errorInfo}
-        </Alert>
-      </Snackbar>
-
-      <Snackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        open={successSnackbar}
-        autoHideDuration={1000}
-        onClose={() => {
-          setSuccessSnackbar(false);
-        }}
-      >
-        <Alert
-          onClose={() => {
-            setSuccessSnackbar(false);
-          }}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
-          Adding Location Success!
-        </Alert>
-      </Snackbar>
     </>
   );
 }
 
-export default AddLocationCard;
+export default ModifyLocationCard;
