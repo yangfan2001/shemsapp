@@ -30,7 +30,7 @@ interface Props {
   squareFeet: number;
   numBed: number;
   numOccupant: number;
-  startDate: Date;
+  startDate: string;
   monthlyBill: number;
   monthlyEnergy: number;
 }
@@ -145,10 +145,7 @@ export default function LocationCard(Props: Props) {
             <ListItemIcon>
               <EventAvailableIcon />
             </ListItemIcon>
-            <ListItemText
-              primary={"Start Date"}
-              secondary={Props.startDate.toDateString()}
-            />
+            <ListItemText primary={"Start Date"} secondary={Props.startDate} />
           </ListItem>
         </List>
       </Collapse>
