@@ -8,3 +8,11 @@ export const getAllDevices = async () => {
 export const getAllDeviceModels = async () => {
     return axiosInstance.get(`${constants.ENDPOINT_DEVICE_URL}/model/all`);
 }
+
+export const postAddDevice = async (location_id:string, model_id:string, tag:string) => {
+    return axiosInstance.post(`${constants.ENDPOINT_DEVICE_URL}/add`, {
+        location_id,
+        model_id,
+        tag
+    });
+}

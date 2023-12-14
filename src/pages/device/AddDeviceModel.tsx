@@ -4,6 +4,10 @@ import { useSnackbar } from '../../components/SnackbarProvier';
 
 
 
+const genLocationName = (location_steet_num: Number, location_street_name: string, location_unit_number:string, location_id:string) => {
+  return `location ${location_id}:`+location_steet_num + " " + location_street_name + " " + location_unit_number;
+}
+
 interface AddDeviceModalProps {
     open: boolean;
     handleClose: () => void;
@@ -14,8 +18,10 @@ interface AddDeviceModalProps {
 
 // Define types for your location and model objects as they should appear
 interface Location {
-    id: string;
-    name: string;
+    location_id: string;
+    location_street_num: Number;
+    location_street_name: string;
+    location_unit_number:string;
     // ... other location properties
 }
 
@@ -97,8 +103,8 @@ export default function AddDeviceModal({ open, handleClose, handleAddDevice, loc
             onChange={(e) => setSelectedLocationId(e.target.value as string)}
           >
             {locations.map((location) => (
-              <MenuItem value={location.id} key={location.id}>
-                {location.name}
+              <MenuItem value={location.location_id} key={location.location_id}>
+                {genLocationName(location.location_street_num, location.location_street_name, location.location_unit_number, location.location_id)}
               </MenuItem>
             ))}
             {(locations.length === 0) && (

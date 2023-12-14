@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Container, Paper, TextField, Grid } from "@mui/material";
+import { Container, Paper, TextField, Grid, Button } from "@mui/material";
 import { User } from "./CustomerInfo";
 import { getCustomerInfo } from "../../services/customer";
 import { getCustomerLocation } from "../../services/location";
+import { getAllDevices  } from "../../services/device";
+import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import { useSnackbar } from "../../components/SnackbarProvier";
 interface ReadOnlyTextFieldProps {
@@ -47,18 +49,17 @@ const AccountInfoPage: React.FC = () => {
   useEffect(() => {
     const fetchCustomerInfo = async () => {
       try {
-        const [userInfoResponse, locationsResponse] = await Promise.all([
+        const [userInfoResponse, locationsResponse, devicesResponse] = await Promise.all([
           getCustomerInfo(),
           getCustomerLocation(),
+          getAllDevices()
         ]);
 
         const newUser = {
           ...userInfoResponse.data,
           locations: locationsResponse.data, // Assuming locationsResponse has data field
-          devices: [], // Populate this as needed
+          devices: devicesResponse.data, // Populate this as needed
         };
-
-        console.log(locationsResponse.data);
         setUser(newUser as User);
       } catch (error) {
         console.error("Failed to fetch customer info:", error);
@@ -73,6 +74,10 @@ const AccountInfoPage: React.FC = () => {
   }, []); // Empty dependency array means this effect runs once on mount
 
   const navigate = useNavigate();
+
+  const genLocationName = (location_steet_num: Number, location_street_name: string, locaiton_unit_number:string) => {
+    return location_steet_num + " " + location_street_name + " " + locaiton_unit_number;
+  }
 
   if (isLoading) {
     return <Loading />;
@@ -125,11 +130,20 @@ const AccountInfoPage: React.FC = () => {
           {user.devices.map((device, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
               <Paper elevation={2} sx={{ padding: 1, margin: "8px 0" }}>
-                <ReadOnlyTextField label="Device Name" value={device.name} />
-                <ReadOnlyTextField label="Device ID" value={device.id} />
+                <ReadOnlyTextField label="Device Name" value={device.model_name} />
+                <ReadOnlyTextField label="Device ID" value={device.device_id} />
               </Paper>
             </Grid>
           ))}
+        </Grid>
+        <Grid>
+          <Button
+            onClick={() => {
+              navigate("/device");
+            }}
+          >
+            To My Device
+          </Button>
         </Grid>
       </Paper>
 
@@ -140,9 +154,9 @@ const AccountInfoPage: React.FC = () => {
               <Paper elevation={2} sx={{ padding: 1, margin: "8px 0" }}>
                 <ReadOnlyTextField
                   label="Location Name"
-                  value={location.name}
+                  value={genLocationName(location.location_street_num, location.location_street_name, location.location_unit_number)}
                 />
-                <ReadOnlyTextField label="Location ID" value={location.id} />
+                <ReadOnlyTextField label="Location ID" value={location.location_id} />
               </Paper>
             </Grid>
           ))}
