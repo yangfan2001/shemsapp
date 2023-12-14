@@ -20,6 +20,8 @@ axiosInstance.interceptors.response.use(
     response => response,
     error => {
         if (error.response.status === 401) {
+            // clear token
+            sessionStorage.clear();
             const path = window.location.pathname;
             if (path !== '/login') {
                 window.location.href = '/login';

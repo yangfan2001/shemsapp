@@ -1,12 +1,19 @@
  type UserDevice = {
-    id: string; // Unique identifier for the device
-    name: string; // The name of the device
+    device_id: string; // Unique identifier for the device
+    model_name: string; // The name of the device
     // ...other properties related to the device
   };
   
   type UserLocation = {
-    id: string; // Unique identifier for the location
+    location_id: string; // Unique identifier for the location
     name: string; // The name of the location
+    location_steet: string;
+    location_city: string;
+    location_state: string;
+    location_zipcode: string;
+    location_street_name: string;
+    location_street_num: Number;
+    location_unit_number: string;
     // ...other properties related to the location
   };
   

@@ -46,6 +46,8 @@ const DataTable: React.FC<DataTableProps> = ({ showSearch=true,rows, columns, ..
             <DataGrid
                 rows={filteredRows}
                 columns={columns}
+                autoPageSize={true}
+                pageSizeOptions={[5, 10, 20]}
                 {...props}
             />
         </Box>
