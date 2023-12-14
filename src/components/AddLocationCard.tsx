@@ -51,22 +51,22 @@ function AddLocationCard() {
   const handleSumbmit = async (event: React.FormEvent<HTMLFormElement>) => {
     // data validation
     event.preventDefault();
-    if (isNaN(Number(streetNum))) {
+    if (isNaN(Number(streetNum)) || Number(streetNum) < 0) {
       setErrorInfo("Invalid Street Number!");
       setFailSnackbar(true);
       return;
     }
-    if (isNaN(Number(squareFeet))) {
+    if (isNaN(Number(squareFeet)) || Number(squareFeet) <= 0) {
       setErrorInfo("Invalid Square Feet!");
       setFailSnackbar(true);
       return;
     }
-    if (isNaN(Number(numBed))) {
+    if (isNaN(Number(numBed)) || Number(numBed) < 0) {
       setErrorInfo("Invalid Bedroom Number!");
       setFailSnackbar(true);
       return;
     }
-    if (isNaN(Number(numOccupants))) {
+    if (isNaN(Number(numOccupants)) || Number(numOccupants) < 0) {
       setErrorInfo("Invalid Occupant Number!");
       setFailSnackbar(true);
       return;
@@ -89,16 +89,21 @@ function AddLocationCard() {
     };
 
     const token = sessionStorage.getItem("token");
+    const email = sessionStorage.getItem("email");
 
-    if (token) {
-      await addLocation(postData, token)
+    if (token && email) {
+      await addLocation(postData, token, email)
         .then((res) => {
           setSuccessSnackbar(true);
           window.location.href = "/location";
         })
         .catch((error) => {
           setFailSnackbar(true);
+          setErrorInfo(error.data);
         });
+    } else {
+      setFailSnackbar(true);
+      setErrorInfo("Login Expired!");
     }
   };
   return (
@@ -229,6 +234,7 @@ function AddLocationCard() {
                   id="square_feet"
                   label="Square Feet"
                   variant="standard"
+                  type="number"
                   onChange={(e) => {
                     setSquareFeet(e.target.value);
                   }}
@@ -242,6 +248,7 @@ function AddLocationCard() {
                   id="num_beds"
                   label="Bedrooms"
                   variant="standard"
+                  type="number"
                   onChange={(e) => {
                     setNumBed(e.target.value);
                   }}
@@ -255,6 +262,7 @@ function AddLocationCard() {
                   id="num_occupants"
                   label="Occupants"
                   variant="standard"
+                  type="number"
                   onChange={(e) => {
                     setNumOccupants(e.target.value);
                   }}

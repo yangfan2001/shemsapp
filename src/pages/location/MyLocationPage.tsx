@@ -25,6 +25,7 @@ function MyLocationPage() {
   const [modifyLocationIndex, setModifyLocationIndex] = useState<number | null>(
     null
   );
+  const [modifyLocationID, setModifyLocationID] = useState<number | null>(null);
   const [openModifyCard, setOpenModifyCard] = useState(false);
   useEffect(() => {
     const fetchLocations = async () => {
@@ -47,6 +48,7 @@ function MyLocationPage() {
           <Paper sx={{ padding: 2, margin: "20px", width: "40vh" }}>
             <LocationCard
               locationIndex={index + 1}
+              locationID={location.location_id}
               streetNum={location.location_street_num}
               streetName={location.location_street_name}
               unitNum={location.location_unit_number}
@@ -61,6 +63,7 @@ function MyLocationPage() {
               monthlyEnergy={100.4}
               setModifyLocationIndex={setModifyLocationIndex}
               setOpenModifyCard={setOpenModifyCard}
+              setModifyLocationID={setModifyLocationID}
             ></LocationCard>
           </Paper>
         ))}
@@ -81,6 +84,7 @@ function MyLocationPage() {
       <ModifyLocationCard
         openCard={openModifyCard}
         modifyIndex={modifyLocationIndex}
+        modifyID={modifyLocationID}
         setOpenModifyCard={setOpenModifyCard}
       />
     </>

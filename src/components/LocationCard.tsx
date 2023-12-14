@@ -20,6 +20,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import WebIcon from "@mui/icons-material/Web";
 
 interface Props {
+  locationID: number;
   locationIndex: number;
   streetNum: number;
   streetName: string;
@@ -35,10 +36,11 @@ interface Props {
   monthlyEnergy: number;
   setModifyLocationIndex: (setIndex: number | null) => void;
   setOpenModifyCard: (open: boolean) => void;
+  setModifyLocationID: (locationID: number | null) => void;
 }
 
 export default function LocationCard(Props: Props) {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
 
   const [openInfo, setOpenInfo] = React.useState(false);
 
@@ -50,9 +52,10 @@ export default function LocationCard(Props: Props) {
     setOpenInfo(!openInfo);
   };
 
-  const handleClickSetting = (index: number) => {
+  const handleClickSetting = (index: number, id: number) => {
     Props.setModifyLocationIndex(index);
     Props.setOpenModifyCard(true);
+    Props.setModifyLocationID(id);
   };
 
   const handleClickEnergy = () => {
@@ -160,7 +163,11 @@ export default function LocationCard(Props: Props) {
         <ListItemText primary="Check Energy Usage" />
       </ListItemButton>
 
-      <ListItemButton onClick={() => handleClickSetting(Props.locationIndex)}>
+      <ListItemButton
+        onClick={() =>
+          handleClickSetting(Props.locationIndex, Props.locationID)
+        }
+      >
         <ListItemIcon>
           <SettingsIcon />
         </ListItemIcon>

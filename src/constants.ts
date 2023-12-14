@@ -17,4 +17,11 @@ export type AddLocationData = {
     squareFeet: number;
     numBed: number;
     numOccupants: number;
-  }
+}
+  
+export type ModifyLocationData = {
+    locationID: number;
+    squareFeet: number | null;
+    numBed: number | null;
+    numOccupants: number | null;
+}
