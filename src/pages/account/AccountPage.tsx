@@ -3,8 +3,7 @@ import { Container, Paper, TextField, Grid, Button } from "@mui/material";
 import { User } from "./CustomerInfo";
 import { getCustomerInfo } from "../../services/customer";
 import { getCustomerLocation } from "../../services/location";
-import { getAllDevices  } from "../../services/device";
-import { useNavigate } from "react-router-dom";
+import { getAllDevices } from "../../services/device";
 import Loading from "../../components/Loading";
 import { useSnackbar } from "../../components/SnackbarProvier";
 import { useNavigate } from "react-router-dom";
@@ -50,11 +49,12 @@ const AccountInfoPage: React.FC = () => {
   useEffect(() => {
     const fetchCustomerInfo = async () => {
       try {
-        const [userInfoResponse, locationsResponse, devicesResponse] = await Promise.all([
-          getCustomerInfo(),
-          getCustomerLocation(),
-          getAllDevices()
-        ]);
+        const [userInfoResponse, locationsResponse, devicesResponse] =
+          await Promise.all([
+            getCustomerInfo(),
+            getCustomerLocation(),
+            getAllDevices(),
+          ]);
 
         const newUser = {
           ...userInfoResponse.data,
@@ -76,9 +76,19 @@ const AccountInfoPage: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const genLocationName = (location_steet_num: Number, location_street_name: string, locaiton_unit_number:string) => {
-    return location_steet_num + " " + location_street_name + " " + locaiton_unit_number;
-  }
+  const genLocationName = (
+    location_steet_num: Number,
+    location_street_name: string,
+    locaiton_unit_number: string
+  ) => {
+    return (
+      location_steet_num +
+      " " +
+      location_street_name +
+      " " +
+      locaiton_unit_number
+    );
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -131,7 +141,10 @@ const AccountInfoPage: React.FC = () => {
           {user.devices.map((device, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
               <Paper elevation={2} sx={{ padding: 1, margin: "8px 0" }}>
-                <ReadOnlyTextField label="Device Name" value={device.model_name} />
+                <ReadOnlyTextField
+                  label="Device Name"
+                  value={device.model_name}
+                />
                 <ReadOnlyTextField label="Device ID" value={device.device_id} />
               </Paper>
             </Grid>
@@ -155,9 +168,16 @@ const AccountInfoPage: React.FC = () => {
               <Paper elevation={2} sx={{ padding: 1, margin: "8px 0" }}>
                 <ReadOnlyTextField
                   label="Location Name"
-                  value={genLocationName(location.location_street_num, location.location_street_name, location.location_unit_number)}
+                  value={genLocationName(
+                    location.location_street_num,
+                    location.location_street_name,
+                    location.location_unit_number
+                  )}
                 />
-                <ReadOnlyTextField label="Location ID" value={location.location_id} />
+                <ReadOnlyTextField
+                  label="Location ID"
+                  value={location.location_id}
+                />
               </Paper>
             </Grid>
           ))}
