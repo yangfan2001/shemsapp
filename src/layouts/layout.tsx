@@ -7,6 +7,7 @@ import RegisterPage from "../pages/register/registerPage";
 import AccountInfoPage from "../pages/account/AccountPage";
 import MyLocationPage from "../pages/location/MyLocationPage";
 import MyDevicePage from "../pages/device/MyDevicePage";
+import Playground from "../pages/energy/Playground";
 const Layout: React.FC = () => {
   return (
     <>
@@ -20,6 +21,7 @@ const Layout: React.FC = () => {
           <Route path="/device" element={<MyDevicePage />} />
           <Route path="/location" element={<MyLocationPage />} />
           <Route path="*" element={<h1>Not Found</h1>} />
+          <Route path="/playground" element={<Playground />} />
         </Routes>
       </Router>
     </>
