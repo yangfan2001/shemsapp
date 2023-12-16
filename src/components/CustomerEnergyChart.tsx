@@ -9,14 +9,26 @@ import {
   YAxis,
 } from "recharts";
 
+interface DataItem {
+  date: string;
+  energy: number;
+}
+
 interface Props {
-  data: never[];
+  data: DataItem[];
+  start: Date;
+  end: Date;
 }
 
 function CustomerEnergyChart(Props: Props) {
+  const filteredData = Props.data.filter((item) => {
+    const itemDate = new Date(item.date);
+    return itemDate >= Props.start && itemDate <= Props.end;
+  });
+
   return (
     <>
-      <BarChart width={730} height={250} data={Props.data}>
+      <BarChart width={730} height={250} data={filteredData}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="date" />
         <YAxis />

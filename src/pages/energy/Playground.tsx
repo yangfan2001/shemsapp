@@ -12,10 +12,19 @@ import {
   YAxis,
 } from "recharts";
 import CustomerEnergyChart from "../../components/CustomerEnergyChart";
+import dayjs, { Dayjs } from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import {
+  DateRange,
+  DateRangePicker,
+  LocalizationProvider,
+} from "@mui/x-date-pickers-pro";
 
 export default function Playground() {
   const [energyPerDay, setEnergyPerDay] = useState([]);
   const [endDay, setEndDay] = useState($TODAY);
+  const displayStart = new Date("2022-12-01T23:59:59");
+  const displayEnd = new Date($TODAY);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,11 +44,26 @@ export default function Playground() {
     fetchData();
   }, [endDay]);
 
-  console.log(energyPerDay);
+  const [value, setValue] = React.useState<DateRange<Dayjs>>([
+    dayjs("2022-04-17"),
+    dayjs("2022-04-21"),
+  ]);
+
+  const range: DateRange<Dayjs> = [dayjs("2022-08-01"), dayjs("2022-12-31")];
 
   return (
     <>
-      <CustomerEnergyChart data={energyPerDay} />
+      <CustomerEnergyChart
+        data={energyPerDay}
+        start={displayStart}
+        end={displayEnd}
+      />
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DateRangePicker
+          value={range}
+          onChange={(newValue: DateRange<Dayjs>) => setValue(newValue)}
+        />
+      </LocalizationProvider>
     </>
   );
 }
