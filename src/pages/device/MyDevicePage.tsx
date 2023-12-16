@@ -12,7 +12,7 @@ import AddDeviceModal from "./AddDeviceModel";
 import DataTable from "../../components/dataTable";
 import { blueGrey } from "@mui/material/colors";
 import { deleteDevice } from "../../services/device";
-
+import EditDeviceModel from "../../components/EditDeviceDialog";
 const genLocationName = (location_steet_num: Number, location_street_name: string, location_unit_number: string) => {
   return location_steet_num + " " + location_street_name + " " + location_unit_number;
 }
@@ -25,6 +25,8 @@ export default function MyDevicePage() {
   const [devices, setDevices] = useState([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [toDeleteDeviceId, setToDeleteDeviceId] = useState('');
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [toBeEditDevice, setToBeEditDevice] = useState({tag:"",id:""} as any);
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
@@ -63,6 +65,14 @@ export default function MyDevicePage() {
     });
   }
 
+  const handleEditButtonClick = (device:any) =>{
+    setToBeEditDevice({
+      tag:device.tag,
+      id:device.id
+    });
+    setEditDialogOpen(true);
+  }
+
 
   const tableColumns = [
     { field: 'id', headerName: 'device_id', width: 80 },
@@ -78,6 +88,7 @@ export default function MyDevicePage() {
             color="primary"
             size="small"
             variant="outlined"
+            onClick={() => handleEditButtonClick(params.row)}
           >
             Edit
           </Button>
@@ -184,6 +195,7 @@ export default function MyDevicePage() {
         </DialogActions>
       </Dialog>
 
+      <EditDeviceModel modelOpen={editDialogOpen} setModelOpen={setEditDialogOpen} device={toBeEditDevice} />
 
     </Container>
   );

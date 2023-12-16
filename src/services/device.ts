@@ -22,3 +22,10 @@ export const deleteDevice = async (device_id:string) => {
         device_id
     });
 }
+
+export const updateDevice = async (device_id:string,tag:string) => {
+    return axiosInstance.post(`${constants.ENDPOINT_DEVICE_URL}/update`, {
+        device_id,
+        tag
+    });
+}
