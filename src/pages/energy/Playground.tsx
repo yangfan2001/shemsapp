@@ -2,16 +2,7 @@ import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid"; // Grid version 1
 import { getCustomerEnergyPerDay } from "../../services/energy";
 import { $TODAY } from "../../constants";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Legend,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-import CustomerEnergyChart from "../../components/CustomerEnergyChart";
+import EnergyPieChart from "../../components/EnergyPieChart";
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
@@ -23,8 +14,15 @@ import {
 export default function Playground() {
   const [energyPerDay, setEnergyPerDay] = useState([]);
   const [endDay, setEndDay] = useState($TODAY);
-  const displayStart = new Date("2022-12-01T23:59:59");
-  const displayEnd = new Date($TODAY);
+  const [displayEnd, setDisplayEnd] = useState<Date>($TODAY);
+  const initStart: Date = new Date($TODAY);
+  initStart.setMonth(initStart.getMonth() - 1);
+  const [displayStart, setDisplayStart] = useState<Date>(initStart);
+
+  const [displayRange, setValue] = React.useState<DateRange<Dayjs>>([
+    dayjs(initStart),
+    dayjs($TODAY),
+  ]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,26 +42,37 @@ export default function Playground() {
     fetchData();
   }, [endDay]);
 
-  const [value, setValue] = React.useState<DateRange<Dayjs>>([
-    dayjs("2022-04-17"),
-    dayjs("2022-04-21"),
-  ]);
+  useEffect(() => {
+    if (displayRange[0]) {
+      setDisplayStart(displayRange[0].toDate());
+    }
+    if (displayRange[1]) {
+      setDisplayEnd(displayRange[1].toDate());
+    }
+  }, [displayRange]);
 
   const range: DateRange<Dayjs> = [dayjs("2022-08-01"), dayjs("2022-12-31")];
 
   return (
     <>
-      <CustomerEnergyChart
-        data={energyPerDay}
-        start={displayStart}
-        end={displayEnd}
-      />
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DateRangePicker
-          value={range}
-          onChange={(newValue: DateRange<Dayjs>) => setValue(newValue)}
-        />
-      </LocalizationProvider>
+      <Grid container padding={2}>
+        <Grid xs={12}>
+          <EnergyPieChart
+            data={energyPerDay}
+            start={displayStart}
+            end={displayEnd}
+          />
+        </Grid>
+        <Grid xs={12}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateRangePicker
+              value={displayRange}
+              onChange={(newValue: DateRange<Dayjs>) => setValue(newValue)}
+              maxDate={dayjs($TODAY)}
+            />
+          </LocalizationProvider>
+        </Grid>
+      </Grid>
     </>
   );
 }
