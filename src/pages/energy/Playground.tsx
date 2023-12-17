@@ -10,6 +10,9 @@ import {
   DateRangePicker,
   LocalizationProvider,
 } from "@mui/x-date-pickers-pro";
+import { PieChart } from "recharts";
+import DeviceTypePieChart from "../../components/chart/DeviceTypePieChart";
+import LocationEnergyPieChart from "../../components/chart/LocationEnergyPieChart";
 
 export default function Playground() {
   const [energyPerDay, setEnergyPerDay] = useState([]);
@@ -57,13 +60,6 @@ export default function Playground() {
     <>
       <Grid container padding={2}>
         <Grid xs={12}>
-          <EnergyPieChart
-            data={energyPerDay}
-            start={displayStart}
-            end={displayEnd}
-          />
-        </Grid>
-        <Grid xs={12}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateRangePicker
               value={displayRange}
@@ -72,6 +68,16 @@ export default function Playground() {
             />
           </LocalizationProvider>
         </Grid>
+        <Grid xs={12}>
+          <EnergyPieChart
+            data={energyPerDay}
+            start={displayStart}
+            end={displayEnd}
+          />
+        </Grid>
+
+        <DeviceTypePieChart start={displayStart} end={displayEnd} />
+        <LocationEnergyPieChart start={displayStart} end={displayEnd} />
       </Grid>
     </>
   );
