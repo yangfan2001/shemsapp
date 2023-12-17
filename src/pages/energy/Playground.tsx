@@ -19,6 +19,9 @@ import {
   DateRangePicker,
   LocalizationProvider,
 } from "@mui/x-date-pickers-pro";
+import { PieChart } from "recharts";
+import DeviceTypePieChart from "../../components/chart/DeviceTypePieChart";
+import LocationEnergyPieChart from "../../components/chart/LocationEnergyPieChart";
 
 export default function Playground() {
   const [energyPerDay, setEnergyPerDay] = useState([]);
@@ -64,6 +67,8 @@ export default function Playground() {
           onChange={(newValue: DateRange<Dayjs>) => setValue(newValue)}
         />
       </LocalizationProvider>
+      <DeviceTypePieChart start={displayStart} end={displayEnd} />
+      <LocationEnergyPieChart start={displayStart} end={displayEnd} />
     </>
   );
 }
