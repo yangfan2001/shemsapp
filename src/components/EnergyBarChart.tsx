@@ -11,14 +11,10 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-
-interface DataItem {
-  date: string;
-  energy: number;
-}
+import { EnergyInfo } from "../constants";
 
 interface Props {
-  data: DataItem[];
+  data: EnergyInfo[];
   start: Date;
   end: Date;
   groupBy: "day" | "month";
@@ -44,7 +40,7 @@ function formatDate(dateString: string, formatType: "day" | "month"): string {
   return dateString; // Fallback to the original string in case of an unexpected format
 }
 
-function groupData(data: DataItem[], groupBy: "day" | "month"): DataItem[] {
+function groupData(data: EnergyInfo[], groupBy: "day" | "month"): EnergyInfo[] {
   const grouped = new Map();
 
   data.forEach((item) => {

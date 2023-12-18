@@ -70,12 +70,10 @@ export default function Playground() {
     }
   }, [displayRange]);
 
-  const range: DateRange<Dayjs> = [dayjs("2022-08-01"), dayjs("2022-12-31")];
-
   return (
     <>
-      <Grid container padding={2}>
-        <Grid xs={8}>
+      <Grid container padding={2} justifyContent="center" alignItems="center">
+        <Grid xs={8} justifyContent="center" alignItems="center" display="flex">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateRangePicker
               value={displayRange}
@@ -84,7 +82,7 @@ export default function Playground() {
             />
           </LocalizationProvider>
         </Grid>
-        <Grid xs={4}>
+        <Grid xs={4} alignItems="center" justifyContent="center" display="flex">
           <FormControl>
             <FormLabel>Display By</FormLabel>
             <RadioGroup value={displayMode} onChange={handleDisplayMode}>
@@ -97,7 +95,12 @@ export default function Playground() {
             </RadioGroup>
           </FormControl>
         </Grid>
-        <Grid xs={12}>
+        <Grid
+          xs={12}
+          justifyContent="center"
+          alignItems="center"
+          display="flex"
+        >
           <EnergyBarChart
             data={energyPerDay}
             start={displayStart}
@@ -105,9 +108,12 @@ export default function Playground() {
             groupBy={displayMode}
           />
         </Grid>
-
-        <DeviceTypePieChart start={displayStart} end={displayEnd} />
-        <LocationEnergyPieChart start={displayStart} end={displayEnd} />
+        <Grid xs={6} justifyContent="center" alignItems="center" display="flex">
+          <DeviceTypePieChart start={displayStart} end={displayEnd} />
+        </Grid>
+        <Grid xs={6} justifyContent="center" alignItems="center" display="flex">
+          <LocationEnergyPieChart start={displayStart} end={displayEnd} />
+        </Grid>
       </Grid>
     </>
   );

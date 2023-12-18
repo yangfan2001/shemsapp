@@ -8,6 +8,7 @@ import AccountInfoPage from "../pages/account/AccountPage";
 import MyLocationPage from "../pages/location/MyLocationPage";
 import MyDevicePage from "../pages/device/MyDevicePage";
 import Playground from "../pages/energy/Playground";
+import LocationEnergyPage from "../pages/energy/LocationEnergyPage";
 const Layout: React.FC = () => {
   return (
     <>
@@ -22,6 +23,7 @@ const Layout: React.FC = () => {
           <Route path="/location" element={<MyLocationPage />} />
           <Route path="*" element={<h1>Not Found</h1>} />
           <Route path="/playground" element={<Playground />} />
+          <Route path="energy/location" element={<LocationEnergyPage />} />
         </Routes>
       </Router>
     </>
