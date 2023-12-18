@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import { getCustomerEnergyLocationType } from '../../services/energy';
-// 模拟从后端获取的数据
+
 interface DataItem {
     name: string;
     value: number;
 }
 
-// 预定义的颜色数组
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#A28FD0', '#FF6666'];
 interface Props {
     start: Date;
@@ -22,6 +21,7 @@ export default function LocationEnergyPieChart(props: Props) {
             await getCustomerEnergyLocationType(props.start, props.end)
                 .then((res) => {
                     const tmp = [] as DataItem[];
+                    console.log(res.data);
                     res.data.forEach((item: any) => {
                         tmp.push({ name: item.address, value: item.energy })
                     });
@@ -33,7 +33,7 @@ export default function LocationEnergyPieChart(props: Props) {
 
         };
         fetchData();
-    }, [props.end]);
+    }, [props.start,props.end]);
     return (
         <PieChart width={400} height={400}>
             <Pie

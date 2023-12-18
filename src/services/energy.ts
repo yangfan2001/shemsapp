@@ -26,7 +26,7 @@ export const getCustomerEnergyDeviceType = async (start:Date, end:Date) => {
 }
 
 export const getCustomerEnergyLocationType = async (start:Date, end:Date) => {
-    return axiosInstance.get(`${constants.ENDPOINT_ENERGY_URL}/location`, {
+    return axiosInstance.get(`${constants.ENDPOINT_ENERGY_URL}/location/pie`, {
         params: {
             start: start.toISOString(), // Convert Date to ISO string
             end: end.toISOString()       // Convert Date to ISO string
