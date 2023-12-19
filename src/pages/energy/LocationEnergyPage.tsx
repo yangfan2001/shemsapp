@@ -40,11 +40,24 @@ function LocationEnergyPage() {
   const [locations, setLocations] = useState<Location[]>([]);
   const [displayData, setDisplayData] = useState<EnergyInfo[]>([]);
   const [displayEnd, setDisplayEnd] = useState<Date>($TODAY);
-  const initStart: Date = new Date($TODAY);
+  const initStart: Date = new Date(
+    Date.UTC(
+      $TODAY.getFullYear(),
+      $TODAY.getMonth(),
+      $TODAY.getDate(),
+      0,
+      0,
+      0,
+      0
+    )
+  );
   initStart.setMonth(initStart.getMonth() - 1);
   const [displayStart, setDisplayStart] = useState<Date>(initStart);
   const [displayMode, setDisplayMode] = React.useState<"day" | "month">("day");
-  const initRange: DateRange<Dayjs> = [dayjs(initStart), dayjs($TODAY)];
+  const initRange: DateRange<Dayjs> = [
+    dayjs(initStart.setDate(initStart.getDate() + 1)),
+    dayjs($TODAY),
+  ];
 
   const handleDisplayMode = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === "day") {
@@ -112,15 +125,40 @@ function LocationEnergyPage() {
         console.error("Error fetching locations:", error);
       }
     };
-
     fetchLocations();
   }, []); // Empty dependency array means this runs once on mount
 
   const handleRange = (newValue: DateRange<Dayjs>) => {
     if (newValue[0] && newValue[1]) {
       // setDisplayRange(newValue);
-      setDisplayStart(newValue[0].toDate());
-      setDisplayEnd(newValue[1].toDate());
+      const start = newValue[0].toDate();
+      const end = newValue[1].toDate();
+
+      const utc_start = new Date(
+        Date.UTC(
+          start.getFullYear(),
+          start.getMonth(),
+          start.getDate(),
+          start.getHours(),
+          start.getMinutes(),
+          start.getSeconds(),
+          start.getMilliseconds()
+        )
+      );
+      const utc_end = new Date(
+        Date.UTC(
+          end.getFullYear(),
+          end.getMonth(),
+          end.getDate(),
+          23,
+          59,
+          59,
+          end.getMilliseconds()
+        )
+      );
+
+      setDisplayStart(utc_start);
+      setDisplayEnd(utc_end);
     }
   };
 

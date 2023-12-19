@@ -55,4 +55,4 @@ export type Location = {
     start_date: string;
   };
 
-export const $TODAY = new Date('2022-12-31T23:59:59');
+export const $TODAY = new Date('2022-12-31T23:59:59Z');
