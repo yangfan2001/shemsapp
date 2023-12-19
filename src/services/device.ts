@@ -16,3 +16,16 @@ export const postAddDevice = async (location_id:string, model_id:string, tag:str
         tag
     });
 }
+
+export const deleteDevice = async (device_id:string) => {
+    return axiosInstance.post(`${constants.ENDPOINT_DEVICE_URL}/delete`, {
+        device_id
+    });
+}
+
+export const updateDevice = async (device_id:string,tag:string) => {
+    return axiosInstance.post(`${constants.ENDPOINT_DEVICE_URL}/update`, {
+        device_id,
+        tag
+    });
+}
