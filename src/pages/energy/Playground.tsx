@@ -10,7 +10,6 @@ import {
   DateRangePicker,
   LocalizationProvider,
 } from "@mui/x-date-pickers-pro";
-import { PieChart } from "recharts";
 import DeviceTypePieChart from "../../components/chart/DeviceTypePieChart";
 import LocationEnergyPieChart from "../../components/chart/LocationEnergyPieChart";
 import {
@@ -18,25 +17,49 @@ import {
   FormControlLabel,
   FormLabel,
   Radio,
-  RadioGroup, Tab, Tabs, Typography, Box, Tooltip
+  RadioGroup,
+  Tab,
+  Tabs,
+  Typography,
+  Box,
+  Tooltip,
 } from "@mui/material";
 import LocationPricePieChart from "../../components/chart/LocationPricePieChart";
 import DeviceTypePricePieChart from "../../components/chart/DeviceTypePricePieChart";
-import BoltIcon from '@mui/icons-material/Bolt';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import BoltIcon from "@mui/icons-material/Bolt";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import TabPanel from "../../components/TabPanel";
-import DateRangeIcon from '@mui/icons-material/DateRange';
-
+import DateRangeIcon from "@mui/icons-material/DateRange";
 
 export default function Playground() {
   const [energyPerDay, setEnergyPerDay] = useState([]);
-  const [endDay, setEndDay] = useState($TODAY);
   const [displayEnd, setDisplayEnd] = useState<Date>($TODAY);
-  const initStart: Date = new Date($TODAY);
+  const initStart: Date = new Date(
+    Date.UTC(
+      $TODAY.getFullYear(),
+      $TODAY.getMonth(),
+      $TODAY.getDate(),
+      0,
+      0,
+      0,
+      0
+    )
+  );
   initStart.setMonth(initStart.getMonth() - 1);
+  const initRangeStart: Date = new Date(
+    Date.UTC(
+      $TODAY.getFullYear(),
+      $TODAY.getMonth() - 1,
+      $TODAY.getDate() + 1,
+      0,
+      0,
+      0,
+      0
+    )
+  );
   const [displayStart, setDisplayStart] = useState<Date>(initStart);
   const [displayMode, setDisplayMode] = React.useState<"day" | "month">("day");
-  const [tabValue, setTabValue] = React.useState('energy');
+  const [tabValue, setTabValue] = React.useState("energy");
 
   const handleDisplayMode = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === "day") {
@@ -46,18 +69,14 @@ export default function Playground() {
     }
   };
 
-  const [displayRange, setValue] = React.useState<DateRange<Dayjs>>([
-    dayjs(initStart),
-    dayjs($TODAY),
-  ]);
+  const initRange: DateRange<Dayjs> = [dayjs(initRangeStart), dayjs($TODAY)];
 
   useEffect(() => {
+    console.log(displayStart.toISOString());
     const fetchData = async () => {
       const token = sessionStorage.getItem("token");
       if (token) {
-        const startDay: Date = new Date(endDay);
-        startDay.setFullYear(endDay.getFullYear() - 1);
-        await getCustomerEnergyPerDay(startDay, endDay, token)
+        await getCustomerEnergyPerDay(displayStart, displayEnd, token)
           .then((res) => {
             setEnergyPerDay(res.data);
           })
@@ -67,31 +86,78 @@ export default function Playground() {
       }
     };
     fetchData();
-  }, [endDay]);
+  }, [displayEnd, displayStart]);
 
-  useEffect(() => {
-    if (displayRange[0]) {
-      setDisplayStart(displayRange[0].toDate());
+  const handleRange = (newValue: DateRange<Dayjs>) => {
+    if (newValue[0] && newValue[1]) {
+      // setDisplayRange(newValue);
+      const start = newValue[0].toDate();
+      const end = newValue[1].toDate();
+
+      const utc_start = new Date(
+        Date.UTC(
+          start.getFullYear(),
+          start.getMonth(),
+          start.getDate(),
+          start.getHours(),
+          start.getMinutes(),
+          start.getSeconds(),
+          start.getMilliseconds()
+        )
+      );
+      const utc_end = new Date(
+        Date.UTC(
+          end.getFullYear(),
+          end.getMonth(),
+          end.getDate(),
+          23,
+          59,
+          59,
+          end.getMilliseconds()
+        )
+      );
+
+      setDisplayStart(utc_start);
+      setDisplayEnd(utc_end);
     }
-    if (displayRange[1]) {
-      setDisplayEnd(displayRange[1].toDate());
-    }
-  }, [displayRange]);
+  };
 
   return (
     <>
-      <Grid container padding={2} justifyContent="space-between" alignItems="center">
-        <Grid xs={8} justifyContent="flex-start" alignItems="center" display="flex">
-          <Tooltip title="Select the time range for your graph" enterDelay={300} leaveDelay={200}>
-            <Typography variant="subtitle1" sx={{ marginRight: 2, display: 'flex', alignItems: 'center', color: 'gray' }}>
+      <Grid
+        container
+        padding={2}
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Grid
+          xs={8}
+          justifyContent="flex-start"
+          alignItems="center"
+          display="flex"
+        >
+          <Tooltip
+            title="Select the time range for your graph"
+            enterDelay={300}
+            leaveDelay={200}
+          >
+            <Typography
+              variant="subtitle1"
+              sx={{
+                marginRight: 2,
+                display: "flex",
+                alignItems: "center",
+                color: "gray",
+              }}
+            >
               <DateRangeIcon sx={{ marginRight: 1 }} />
               Select Time Range
             </Typography>
           </Tooltip>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateRangePicker
-              value={displayRange}
-              onChange={(newValue: DateRange<Dayjs>) => setValue(newValue)}
+              value={initRange}
+              onChange={(newValue: DateRange<Dayjs>) => handleRange(newValue)}
               maxDate={dayjs($TODAY)}
             />
           </LocalizationProvider>
@@ -110,7 +176,6 @@ export default function Playground() {
           </FormControl>
         </Grid>
         <Grid container spacing={1}>
-
           <Grid item xs={12}>
             <Tabs
               value={tabValue}
@@ -129,27 +194,58 @@ export default function Playground() {
           {/* Energy Usage TabPanel */}
           <TabPanel value={tabValue} index="energy">
             <Grid container spacing={2}>
-
               <Grid item xs={12} justifyContent="center" alignItems="center">
                 <Box textAlign="center">
-                  <EnergyBarChart data={energyPerDay} start={displayStart} end={displayEnd} groupBy={displayMode} />
-                  <Typography variant="subtitle1" gutterBottom sx={{ color: 'gray' }}>
+                  <EnergyBarChart
+                    data={energyPerDay}
+                    start={displayStart}
+                    end={displayEnd}
+                    groupBy={displayMode}
+                  />
+                  <Typography
+                    variant="subtitle1"
+                    gutterBottom
+                    sx={{ color: "gray" }}
+                  >
                     Energy Usage Bar Chart (kwh)
                   </Typography>
                 </Box>
               </Grid>
-              <Grid item xs={6} display="flex" justifyContent="center" alignItems="center">
+              <Grid
+                item
+                xs={6}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
                 <Box textAlign="center">
                   <DeviceTypePieChart start={displayStart} end={displayEnd} />
-                  <Typography variant="subtitle1" gutterBottom sx={{ color: 'gray' }}>
+                  <Typography
+                    variant="subtitle1"
+                    gutterBottom
+                    sx={{ color: "gray" }}
+                  >
                     Device Type Energy Usage Pie Chart (kwh)
                   </Typography>
                 </Box>
               </Grid>
-              <Grid item xs={6} display="flex" justifyContent="center" alignItems="center">
+              <Grid
+                item
+                xs={6}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
                 <Box textAlign="center">
-                  <LocationEnergyPieChart start={displayStart} end={displayEnd} />
-                  <Typography variant="subtitle1" gutterBottom sx={{ color: 'gray' }}>
+                  <LocationEnergyPieChart
+                    start={displayStart}
+                    end={displayEnd}
+                  />
+                  <Typography
+                    variant="subtitle1"
+                    gutterBottom
+                    sx={{ color: "gray" }}
+                  >
                     Location Energy Usage Pie Chart (kwh)
                   </Typography>
                 </Box>
@@ -157,28 +253,51 @@ export default function Playground() {
             </Grid>
           </TabPanel>
 
-
           <TabPanel value={tabValue} index="cost">
             <Grid container spacing={1}>
-
-              <Grid item xs={6} display="flex" justifyContent="center" alignItems="center">
+              <Grid
+                item
+                xs={6}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
                 <Box textAlign="center">
-                  <LocationPricePieChart start={displayStart} end={displayEnd} />
-                  <Typography variant="subtitle1" gutterBottom sx={{ color: 'gray' }}>
+                  <LocationPricePieChart
+                    start={displayStart}
+                    end={displayEnd}
+                  />
+                  <Typography
+                    variant="subtitle1"
+                    gutterBottom
+                    sx={{ color: "gray" }}
+                  >
                     Location Energy Price Pie Chart ($)
                   </Typography>
                 </Box>
               </Grid>
 
-              <Grid item xs={6} display="flex" justifyContent="center" alignItems="center">
+              <Grid
+                item
+                xs={6}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
                 <Box textAlign="center">
-                  <DeviceTypePricePieChart start={displayStart} end={displayEnd} />
-                  <Typography variant="subtitle1" gutterBottom sx={{ color: 'gray' }}>
+                  <DeviceTypePricePieChart
+                    start={displayStart}
+                    end={displayEnd}
+                  />
+                  <Typography
+                    variant="subtitle1"
+                    gutterBottom
+                    sx={{ color: "gray" }}
+                  >
                     Location Energy Price Pie Chart ($)
                   </Typography>
                 </Box>
               </Grid>
-
             </Grid>
           </TabPanel>
         </Grid>
