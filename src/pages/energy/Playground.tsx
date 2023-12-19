@@ -18,10 +18,15 @@ import {
   FormControlLabel,
   FormLabel,
   Radio,
-  RadioGroup,
+  RadioGroup, Tab, Tabs, Typography, Box, Tooltip
 } from "@mui/material";
 import LocationPricePieChart from "../../components/chart/LocationPricePieChart";
 import DeviceTypePricePieChart from "../../components/chart/DeviceTypePricePieChart";
+import BoltIcon from '@mui/icons-material/Bolt';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import TabPanel from "../../components/TabPanel";
+import DateRangeIcon from '@mui/icons-material/DateRange';
+
 
 export default function Playground() {
   const [energyPerDay, setEnergyPerDay] = useState([]);
@@ -31,6 +36,7 @@ export default function Playground() {
   initStart.setMonth(initStart.getMonth() - 1);
   const [displayStart, setDisplayStart] = useState<Date>(initStart);
   const [displayMode, setDisplayMode] = React.useState<"day" | "month">("day");
+  const [tabValue, setTabValue] = React.useState('energy');
 
   const handleDisplayMode = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === "day") {
@@ -74,8 +80,14 @@ export default function Playground() {
 
   return (
     <>
-      <Grid container padding={2} justifyContent="center" alignItems="center">
-        <Grid xs={8} justifyContent="center" alignItems="center" display="flex">
+      <Grid container padding={2} justifyContent="space-between" alignItems="center">
+        <Grid xs={8} justifyContent="flex-start" alignItems="center" display="flex">
+          <Tooltip title="Select the time range for your graph" enterDelay={300} leaveDelay={200}>
+            <Typography variant="subtitle1" sx={{ marginRight: 2, display: 'flex', alignItems: 'center', color: 'gray' }}>
+              <DateRangeIcon sx={{ marginRight: 1 }} />
+              Select Time Range
+            </Typography>
+          </Tooltip>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateRangePicker
               value={displayRange}
@@ -97,32 +109,78 @@ export default function Playground() {
             </RadioGroup>
           </FormControl>
         </Grid>
-        <Grid
-          xs={12}
-          justifyContent="center"
-          alignItems="center"
-          display="flex"
-        >
-          <EnergyBarChart
-            data={energyPerDay}
-            start={displayStart}
-            end={displayEnd}
-            groupBy={displayMode}
-          />
-        </Grid>
-        <Grid xs={6} justifyContent="center" alignItems="center" display="flex">
-          <DeviceTypePieChart start={displayStart} end={displayEnd} />
-        </Grid>
-        <Grid xs={6} justifyContent="center" alignItems="center" display="flex">
-          <LocationEnergyPieChart start={displayStart} end={displayEnd} />
-        </Grid>
+        <Grid container spacing={1}>
 
-        <Grid xs={6} justifyContent="center" alignItems="center" display="flex">
-          <LocationPricePieChart start={displayStart} end={displayEnd} />
-        </Grid>
+          <Grid item xs={12}>
+            <Tabs
+              value={tabValue}
+              onChange={(event, newValue) => {
+                setTabValue(newValue);
+              }}
+              variant="fullWidth"
+              indicatorColor="secondary"
+              textColor="inherit"
+            >
+              <Tab label="Energy Usage" value="energy" icon={<BoltIcon />} />
+              <Tab label="Cost" value="cost" icon={<AttachMoneyIcon />} />
+            </Tabs>
+          </Grid>
 
-        <Grid xs={6} justifyContent="center" alignItems="center" display="flex">
-          <DeviceTypePricePieChart start={displayStart} end={displayEnd} />
+          {/* Energy Usage TabPanel */}
+          <TabPanel value={tabValue} index="energy">
+            <Grid container spacing={2}>
+
+              <Grid item xs={12} justifyContent="center" alignItems="center">
+                <Box textAlign="center">
+                  <EnergyBarChart data={energyPerDay} start={displayStart} end={displayEnd} groupBy={displayMode} />
+                  <Typography variant="subtitle1" gutterBottom sx={{ color: 'gray' }}>
+                    Energy Usage Bar Chart (kwh)
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={6} display="flex" justifyContent="center" alignItems="center">
+                <Box textAlign="center">
+                  <DeviceTypePieChart start={displayStart} end={displayEnd} />
+                  <Typography variant="subtitle1" gutterBottom sx={{ color: 'gray' }}>
+                    Device Type Energy Usage Pie Chart (kwh)
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={6} display="flex" justifyContent="center" alignItems="center">
+                <Box textAlign="center">
+                  <LocationEnergyPieChart start={displayStart} end={displayEnd} />
+                  <Typography variant="subtitle1" gutterBottom sx={{ color: 'gray' }}>
+                    Location Energy Usage Pie Chart (kwh)
+                  </Typography>
+                </Box>
+              </Grid>
+            </Grid>
+          </TabPanel>
+
+
+          <TabPanel value={tabValue} index="cost">
+            <Grid container spacing={1}>
+
+              <Grid item xs={6} display="flex" justifyContent="center" alignItems="center">
+                <Box textAlign="center">
+                  <LocationPricePieChart start={displayStart} end={displayEnd} />
+                  <Typography variant="subtitle1" gutterBottom sx={{ color: 'gray' }}>
+                    Location Energy Price Pie Chart ($)
+                  </Typography>
+                </Box>
+              </Grid>
+
+              <Grid item xs={6} display="flex" justifyContent="center" alignItems="center">
+                <Box textAlign="center">
+                  <DeviceTypePricePieChart start={displayStart} end={displayEnd} />
+                  <Typography variant="subtitle1" gutterBottom sx={{ color: 'gray' }}>
+                    Location Energy Price Pie Chart ($)
+                  </Typography>
+                </Box>
+              </Grid>
+
+            </Grid>
+          </TabPanel>
         </Grid>
       </Grid>
     </>
