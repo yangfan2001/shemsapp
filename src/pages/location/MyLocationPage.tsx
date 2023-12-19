@@ -4,21 +4,7 @@ import LocationCard from "../../components/LocationCard";
 import { Grid, Paper } from "@mui/material";
 import AddLocationCard from "../../components/AddLocationCard";
 import ModifyLocationCard from "../../components/ModifyLocationCard";
-
-type Location = {
-  customer_id: number;
-  location_id: number;
-  location_city: string;
-  location_state: string;
-  location_zipcode: string;
-  location_street_num: number;
-  location_street_name: string;
-  location_unit_number: string;
-  square_feet: number;
-  num_bedrooms: number;
-  num_occupants: number;
-  start_date: string;
-};
+import { Location } from "../../constants";
 
 function MyLocationPage() {
   const [locations, setLocations] = useState([]);
