@@ -28,7 +28,7 @@ import {
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import EnergyBarChart from "../../components/EnergyBarChart";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import LocationDeviceTypeChart from "../../components/chart/LocationDeviceTypePieChart";
 
 function LocationEnergyPage() {
@@ -58,6 +58,15 @@ function LocationEnergyPage() {
     dayjs(initStart.setDate(initStart.getDate() + 1)),
     dayjs($TODAY),
   ];
+
+  const stateLocation = useLocation();
+  const locationID = stateLocation.state?.locationID;
+
+  useEffect(() => {
+    if (locationID !== undefined) {
+      setDisplayLocation(locationID);
+    }
+  }, [locationID]);
 
   const handleDisplayMode = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === "day") {
@@ -174,7 +183,11 @@ function LocationEnergyPage() {
         >
           <FormControl sx={{ m: 1, minWidth: 120 }} fullWidth>
             <InputLabel>Location</InputLabel>
-            <Select label="Location" onChange={handleSelectLocation}>
+            <Select
+              label="Location"
+              onChange={handleSelectLocation}
+              value={locationID}
+            >
               <MenuItem value="">
                 <em>Not Selected</em>
               </MenuItem>

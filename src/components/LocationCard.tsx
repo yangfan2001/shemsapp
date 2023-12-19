@@ -18,6 +18,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import SettingsIcon from "@mui/icons-material/Settings";
 import WebIcon from "@mui/icons-material/Web";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   locationID: number;
@@ -44,6 +45,8 @@ export default function LocationCard(Props: Props) {
 
   const [openInfo, setOpenInfo] = React.useState(false);
 
+  const navigate = useNavigate();
+
   const handleClickAddress = () => {
     setOpen(!open);
   };
@@ -59,7 +62,7 @@ export default function LocationCard(Props: Props) {
   };
 
   const handleClickEnergy = () => {
-    // handling redirect...
+    navigate("/energy/location", { state: { locationID: Props.locationID } });
   };
 
   return (
