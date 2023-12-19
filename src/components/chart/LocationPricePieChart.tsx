@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
-import { getCustomerEnergyLocationType } from '../../services/energy';
-
+import { getCustomerPriceLocationType } from '../../services/price';
 interface DataItem {
     name: string;
     value: number;
@@ -12,17 +11,18 @@ interface Props {
     start: Date;
     end: Date;
 }
-export default function LocationEnergyPieChart(props: Props) {
+export default function LocationPricePieChart(props: Props) {
     const [data, setData] = useState<DataItem[]>([]);
     useEffect(() => {
         const fetchData = async () => {
 
 
-            await getCustomerEnergyLocationType(props.start, props.end)
+            await getCustomerPriceLocationType(props.start, props.end)
                 .then((res) => {
+                    console.log(res.data);
                     const tmp = [] as DataItem[];
                     res.data.forEach((item: any) => {
-                        tmp.push({ name: item.address, value: item.energy })
+                        tmp.push({ name: item.address, value: item.cost })
                     });
                     setData(tmp);
                 })

@@ -5,7 +5,8 @@ export default {
     ENDPOINT_CUSTOMER_URL: `${ENDPOINT_URL}/customer`,
     ENDPOINT_LOCATION_URL: `${ENDPOINT_URL}/location`, 
     ENDPOINT_DEVICE_URL: `${ENDPOINT_URL}/device`,
-    ENDPOINT_ENERGY_URL: `${ENDPOINT_URL}/energy`
+    ENDPOINT_ENERGY_URL: `${ENDPOINT_URL}/energy`,
+    ENDPOINT_PRICE_URL: `${ENDPOINT_URL}/price`,
 }
 
 export type AddLocationData = {

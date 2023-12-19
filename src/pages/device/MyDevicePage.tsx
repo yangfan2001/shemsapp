@@ -5,7 +5,7 @@ import { getAllDevices, getAllDeviceModels, postAddDevice } from "../../services
 import { getCustomerLocation } from "../../services/location";
 import {
   Container, Paper, Button, Dialog,
-  DialogActions, DialogContent, DialogContentText
+  DialogActions, DialogContent, DialogContentText,Switch, Box, FormControlLabel
 } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AddDeviceModal from "./AddDeviceModel";
@@ -13,6 +13,10 @@ import DataTable from "../../components/dataTable";
 import { blueGrey } from "@mui/material/colors";
 import { deleteDevice } from "../../services/device";
 import EditDeviceModel from "../../components/EditDeviceDialog";
+import { getEnergyOfAllDevices } from "../../services/energy";
+import { $TODAY } from "../../constants";
+import DeviceEnergyChartDialog from "../../components/DeviceEnergyChartDialog";
+
 const genLocationName = (location_steet_num: Number, location_street_name: string, location_unit_number: string) => {
   return location_steet_num + " " + location_street_name + " " + location_unit_number;
 }
@@ -27,6 +31,17 @@ export default function MyDevicePage() {
   const [toDeleteDeviceId, setToDeleteDeviceId] = useState('');
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [toBeEditDevice, setToBeEditDevice] = useState({tag:"",id:""} as any);
+  const [energyDialogOpen, setEnergyDialogOpen] = useState(false);
+
+  const start = new Date($TODAY);
+  start.setMonth(start.getMonth() - 1);
+  const end = new Date($TODAY);
+
+  const [isEnergyTable, setIsEnergyTable] = useState(false);
+  const [energyTable, setEnergyTable] = useState([]);
+  const [showEnergyDeviceId, setShowEnergyDeviceId] = useState('' as any);
+
+
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
@@ -105,15 +120,42 @@ export default function MyDevicePage() {
     },
   ]
 
+  const energyTableColumns = [
+    { field: 'id', headerName: 'device_id', width: 80 },
+    { field: 'model_type', headerName: 'Model Type', width: 150 },
+    { field: 'model_name', headerName: 'Model Name', width: 250 },
+    { field: 'address', headerName: 'Location', width: 250 },
+    { field: 'energy', headerName: 'Last Month\'s Comsuption', width: 250 },
+    {
+      field: 'action', headerName: 'Actions', width: 200,
+      renderCell: (params: any) => (
+        <strong>
+          <Button
+            color="primary"
+            size="small"
+            variant="outlined"
+            onClick={() => {
+              setEnergyDialogOpen(true)
+              setShowEnergyDeviceId(params.row.id)
+            }}
+          >
+            Show Energy
+          </Button>
+        </strong>
+      )
+    },
+  ]
+
 
   useEffect(() => {
     // declare a function fetchData that is async and calls getAllDevices
     const fetchData = async () => {
       try {
-        const [deviceResponse, deviceModelResponse, locationResponse] = await Promise.all([
+        const [deviceResponse, deviceModelResponse, locationResponse,energyResponse] = await Promise.all([
           getAllDevices(),
           getAllDeviceModels(),
-          getCustomerLocation()
+          getCustomerLocation(),
+          getEnergyOfAllDevices(start,end)
         ]);
         setDeviceModels(deviceModelResponse.data);
         setLocations(locationResponse.data);
@@ -127,7 +169,16 @@ export default function MyDevicePage() {
           }
         })
         setDevices(tmp);
-        console.log(tmp);
+        const tmp2 = energyResponse.data.map((device:any)=>{
+          return {
+            id: device.device_id,
+            model_type: device.model_type,
+            model_name: device.model_name,
+            address:device.address,
+            energy:device.average_energy_consumption
+          }
+        })
+        setEnergyTable(tmp2);
       } catch (error: any) {
         if (error.message) {
           showSnackbar(error.message, 'error')
@@ -149,8 +200,10 @@ export default function MyDevicePage() {
     );
   }
   return (
-    <Container maxWidth="lg">
-      <Paper sx={{ margin: '24px 0', padding: '16px' }}>
+    <Container maxWidth="lg" sx={{ margin: '24px 0', padding: '16x'}}>
+
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        
         <Button
           variant="contained"
           startIcon={<AddCircleOutlineIcon />}
@@ -159,8 +212,20 @@ export default function MyDevicePage() {
         >
           Add Device
         </Button>
-        <DataTable rows={devices} columns={tableColumns} showSearch={false} />
-      </Paper>
+
+        <FormControlLabel
+          control={<Switch checked={isEnergyTable} onChange={() => setIsEnergyTable(!isEnergyTable)} />}
+          label="Energy Table"
+        />
+      </Box>
+
+        {
+          isEnergyTable ? 
+          <DataTable columns={energyTableColumns} rows={energyTable} />
+          :
+          <DataTable columns={tableColumns} rows={devices} />
+        }
+
       <AddDeviceModal open={openModal} handleClose={handleCloseModal} handleAddDevice={handleAddDevice}
         locations={locations} Models={deviceModels} />
 
@@ -196,6 +261,8 @@ export default function MyDevicePage() {
       </Dialog>
 
       <EditDeviceModel modelOpen={editDialogOpen} setModelOpen={setEditDialogOpen} device={toBeEditDevice} />
+
+      <DeviceEnergyChartDialog modelOpen={energyDialogOpen} setModelOpen={setEnergyDialogOpen} deviceId={showEnergyDeviceId}/>
 
     </Container>
   );

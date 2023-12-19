@@ -20,6 +20,8 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
+import LocationPricePieChart from "../../components/chart/LocationPricePieChart";
+import DeviceTypePricePieChart from "../../components/chart/DeviceTypePricePieChart";
 
 export default function Playground() {
   const [energyPerDay, setEnergyPerDay] = useState([]);
@@ -114,6 +116,15 @@ export default function Playground() {
         <Grid xs={6} justifyContent="center" alignItems="center" display="flex">
           <LocationEnergyPieChart start={displayStart} end={displayEnd} />
         </Grid>
+
+        <Grid xs={6} justifyContent="center" alignItems="center" display="flex">
+          <LocationPricePieChart start={displayStart} end={displayEnd} />
+        </Grid>
+
+        <Grid xs={6} justifyContent="center" alignItems="center" display="flex">
+          <DeviceTypePricePieChart start={displayStart} end={displayEnd} />
+        </Grid>
+
       </Grid>
     </>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import FormControl from "@mui/material/FormControl";
@@ -16,6 +16,15 @@ const LoginCard: React.FC = () => {
   const [error, setError] = useState(false);
   const [successSnackbar, setSuccessSnackbar] = useState(false);
   const [failSnackbar, setFailSnackbar] = useState(false);
+
+
+  useEffect(() => {
+    // check if user has logged in
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      window.location.href = "/account";
+    }
+  }, []);
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

@@ -26,7 +26,7 @@ export default function DeviceTypeChart(props: Props) {
                     setData(tmp);
                 })
                 .catch((err) => {
-                    alert("Wrong! Error Code: " + err.data);
+                    console.log(err);
                 });
 
         };

@@ -47,3 +47,22 @@ export const getCustomerEnergyPerLocationPerDay = async (start:Date, end:Date, t
     };
     return axiosInstance.get(`${constants.ENDPOINT_ENERGY_URL}/location`, config);
 }
+
+export const getEnergyOfAllDevices = async (start:Date, end:Date) => {
+    return axiosInstance.get(`${constants.ENDPOINT_ENERGY_URL}/device/all`, {
+        params: {
+            start: start.toISOString(), // Convert Date to ISO string
+            end: end.toISOString()       // Convert Date to ISO string
+        }
+    });
+}
+
+export const getEnergyPerDayByDeviceId = async (device_id:string,start:Date, end:Date) => {
+    return axiosInstance.get(`${constants.ENDPOINT_ENERGY_URL}/device/day`, {
+        params: {
+            device_id: device_id,
+            start: start.toISOString(), // Convert Date to ISO string
+            end: end.toISOString()       // Convert Date to ISO string
+        }
+    });
+}
