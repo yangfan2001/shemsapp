@@ -87,7 +87,7 @@ export default function Playground() {
         <Grid xs={4} alignItems="center" justifyContent="center" display="flex">
           <FormControl>
             <FormLabel>Display By</FormLabel>
-            <RadioGroup value={displayMode} onChange={handleDisplayMode}>
+            <RadioGroup value={displayMode} onChange={handleDisplayMode} row>
               <FormControlLabel value="day" control={<Radio />} label="Day" />
               <FormControlLabel
                 value="month"
@@ -124,7 +124,6 @@ export default function Playground() {
         <Grid xs={6} justifyContent="center" alignItems="center" display="flex">
           <DeviceTypePricePieChart start={displayStart} end={displayEnd} />
         </Grid>
-
       </Grid>
     </>
   );

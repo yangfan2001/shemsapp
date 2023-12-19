@@ -25,6 +25,16 @@ export const getCustomerEnergyDeviceType = async (start:Date, end:Date) => {
     });
 }
 
+export const getCustomerEnergyLocationDeviceType = async (location_id:Number|null, start:Date, end:Date) => {
+    return axiosInstance.get(`${constants.ENDPOINT_ENERGY_URL}/location/device_type`, {
+        params: {
+            location_id:location_id,
+            start: start.toISOString(), // Convert Date to ISO string
+            end: end.toISOString()       // Convert Date to ISO string
+        }
+    });
+}
+
 export const getCustomerEnergyLocationType = async (start:Date, end:Date) => {
     return axiosInstance.get(`${constants.ENDPOINT_ENERGY_URL}/location/pie`, {
         params: {

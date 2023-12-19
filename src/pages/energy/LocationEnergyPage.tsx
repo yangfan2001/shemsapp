@@ -30,10 +30,10 @@ import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import EnergyBarChart from "../../components/EnergyBarChart";
 import { useNavigate } from "react-router-dom";
+import LocationDeviceTypeChart from "../../components/chart/LocationDeviceTypePieChart";
 
 function LocationEnergyPage() {
   const navigate = useNavigate();
-  const [queryEndDate, setQueryEndDate] = useState($TODAY);
   const [energyLocationDay, setEnergyLocationDay] = useState<
     EnergyInfoByLocationDate[]
   >([]);
@@ -60,9 +60,10 @@ function LocationEnergyPage() {
 
   const handleSelectLocation = (event: SelectChangeEvent) => {
     setDisplayLocation(Number(event.target.value));
+    // console.log(displayLocation);
     const filterData = () => {
       energyLocationDay.map((item) => {
-        if (item.location_id === displayLocation) {
+        if (item.location_id === Number(event.target.value)) {
           setDisplayData(item.energy);
         }
       });
@@ -74,11 +75,9 @@ function LocationEnergyPage() {
     const fetchData = async () => {
       const token = sessionStorage.getItem("token");
       if (token) {
-        const queryStartDate = new Date(queryEndDate);
-        queryStartDate.setMonth(queryStartDate.getMonth() - 5);
         await getCustomerEnergyPerLocationPerDay(
-          queryStartDate,
-          queryEndDate,
+          displayStart,
+          displayEnd,
           token
         )
           .then((res) => {
@@ -90,7 +89,7 @@ function LocationEnergyPage() {
       }
     };
     fetchData();
-  }, [queryEndDate]);
+  }, [displayStart, displayEnd]);
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -155,7 +154,7 @@ function LocationEnergyPage() {
         <Grid xs={3} alignItems="center" justifyContent="center" display="flex">
           <FormControl>
             <FormLabel>Display By</FormLabel>
-            <RadioGroup value={displayMode} onChange={handleDisplayMode}>
+            <RadioGroup value={displayMode} onChange={handleDisplayMode} row>
               <FormControlLabel value="day" control={<Radio />} label="Day" />
               <FormControlLabel
                 value="month"
@@ -174,7 +173,11 @@ function LocationEnergyPage() {
           />
         </Grid>
         <Grid xs={4} justifyContent="center" alignItems="center" display="flex">
-          "Display pie chart here, show proportion of device type"
+          <LocationDeviceTypeChart
+            location_id={displayLocation ? displayLocation : null}
+            start={displayStart}
+            end={displayEnd}
+          />
         </Grid>
       </Grid>
       <Grid xs={3} justifyContent="center" alignItems="center" display="flex">
