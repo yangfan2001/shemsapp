@@ -14,7 +14,6 @@ import {
   Grid,
   InputLabel,
   MenuItem,
-  Paper,
   Radio,
   RadioGroup,
   Select,
@@ -45,10 +44,7 @@ function LocationEnergyPage() {
   initStart.setMonth(initStart.getMonth() - 1);
   const [displayStart, setDisplayStart] = useState<Date>(initStart);
   const [displayMode, setDisplayMode] = React.useState<"day" | "month">("day");
-  const [displayRange, setValue] = React.useState<DateRange<Dayjs>>([
-    dayjs(initStart),
-    dayjs($TODAY),
-  ]);
+  const initRange: DateRange<Dayjs> = [dayjs(initStart), dayjs($TODAY)];
 
   const handleDisplayMode = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === "day") {
@@ -88,15 +84,30 @@ function LocationEnergyPage() {
           });
       }
     };
+
     fetchData();
   }, [displayStart, displayEnd]);
+
+  const filterData = () => {
+    //   console.log(energyLocationDay);
+    energyLocationDay.map((item) => {
+      if (item.location_id == Number(displayLocation)) {
+        setDisplayData(item.energy);
+      }
+    });
+  };
+
+  useEffect(() => {
+    // Call filterData in a separate useEffect if displayLocation changes
+    filterData();
+  }, [displayLocation, energyLocationDay]);
 
   useEffect(() => {
     const fetchLocations = async () => {
       try {
         const response = await getCustomerLocation();
         setLocations(response.data);
-        console.log(locations);
+        // console.log(locations);
       } catch (error) {
         console.error("Error fetching locations:", error);
       }
@@ -105,14 +116,13 @@ function LocationEnergyPage() {
     fetchLocations();
   }, []); // Empty dependency array means this runs once on mount
 
-  useEffect(() => {
-    if (displayRange[0]) {
-      setDisplayStart(displayRange[0].toDate());
+  const handleRange = (newValue: DateRange<Dayjs>) => {
+    if (newValue[0] && newValue[1]) {
+      // setDisplayRange(newValue);
+      setDisplayStart(newValue[0].toDate());
+      setDisplayEnd(newValue[1].toDate());
     }
-    if (displayRange[1]) {
-      setDisplayEnd(displayRange[1].toDate());
-    }
-  }, [displayRange]);
+  };
 
   return (
     <>
@@ -145,8 +155,8 @@ function LocationEnergyPage() {
         <Grid xs={6} alignItems="center" justifyContent="center" display="flex">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateRangePicker
-              value={displayRange}
-              onChange={(newValue: DateRange<Dayjs>) => setValue(newValue)}
+              value={initRange}
+              onChange={(newValue: DateRange<Dayjs>) => handleRange(newValue)}
               maxDate={dayjs($TODAY)}
             />
           </LocalizationProvider>
