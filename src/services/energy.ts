@@ -1,6 +1,5 @@
 import axiosInstance from "./axiosConfig";
 import constants, { AddLocationData, ModifyLocationData } from "../constants";
-import axios from "axios";
 
 export const getCustomerEnergyPerDay = async (start:Date, end:Date, token:string) => {
     const params = {

@@ -22,7 +22,7 @@ const Layout: React.FC = () => {
           <Route path="/device" element={<MyDevicePage />} />
           <Route path="/location" element={<MyLocationPage />} />
           <Route path="*" element={<h1>Not Found</h1>} />
-          <Route path="/playground" element={<Playground />} />
+          <Route path="/energy-info" element={<Playground />} />
           <Route path="energy/location" element={<LocationEnergyPage />} />
         </Routes>
       </Router>
