@@ -156,11 +156,11 @@ export default function MyDevicePage() {
     { field: "model_type", headerName: "Model Type", width: 150 },
     { field: "model_name", headerName: "Model Name", width: 250 },
     { field: "address", headerName: "Location", width: 250 },
-    { field: "energy", headerName: "Last Month's Comsuption", width: 250 },
+    { field: "energy", headerName: "Last Month's Comsuption", width: 150 },
     {
       field: "action",
       headerName: "Actions",
-      width: 200,
+      width: 250,
       renderCell: (params: any) => (
         <strong>
           <Button
@@ -178,6 +178,7 @@ export default function MyDevicePage() {
             color="primary"
             size="small"
             variant="outlined"
+            style={{ marginLeft: 16 }}
             onClick={() => {
               setEventDialogOpen(true);
               setShowEnergyDeviceId(params.row.id);
