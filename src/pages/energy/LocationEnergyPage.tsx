@@ -244,7 +244,7 @@ function LocationEnergyPage() {
       <Grid xs={3} justifyContent="center" alignItems="center" display="flex">
         <Button
           onClick={() => {
-            navigate("/playground");
+            navigate("/energy-info");
           }}
           variant="contained"
         >

@@ -33,13 +33,13 @@ export default function DeviceTypeChart(props: Props) {
         fetchData();
     }, [props.start,props.end]);
     return (
-        <PieChart width={400} height={300}>
+        <PieChart width={400} height={320}>
             <Pie
                 dataKey="value"
                 isAnimationActive={false}
                 data={data}
                 cx={200}
-                cy={100}
+                cy={150}
                 outerRadius={100}
                 fill="#8884d8"
                 label

@@ -145,7 +145,6 @@ export default function Playground() {
         padding={2}
         justifyContent="space-between"
         alignItems="center"
-        mt={2}
       >
         <Grid
           xs={8}
@@ -317,7 +316,7 @@ export default function Playground() {
                     gutterBottom
                     sx={{ color: "gray" }}
                   >
-                    Location Energy Price Pie Chart ($)
+                    Device Type Energy Price Pie Chart ($)
                   </Typography>
                 </Box>
               </Grid>

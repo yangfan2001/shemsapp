@@ -123,7 +123,7 @@ export default function DeviceEnergyChartDialog(props: Props) {
         maxWidth={"xl"}
       >
         <DialogTitle>
-          Energy Usage In The Past Month For Device ID:{props.deviceId}
+          Energy Usage In The Past For Device ID:{props.deviceId}
         </DialogTitle>
         <DialogContent>
           <Box sx={{ width: 1000, height: 300, overflow: "hidden" }}>
