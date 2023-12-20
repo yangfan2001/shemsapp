@@ -18,6 +18,7 @@ import {
   Switch,
   Box,
   FormControlLabel,
+  Grid,
 } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import AddDeviceModal from "./AddDeviceModel";
@@ -156,11 +157,11 @@ export default function MyDevicePage() {
     { field: "model_type", headerName: "Model Type", width: 150 },
     { field: "model_name", headerName: "Model Name", width: 250 },
     { field: "address", headerName: "Location", width: 250 },
-    { field: "energy", headerName: "Last Month's Comsuption", width: 150 },
+    { field: "energy", headerName: "Last Month's Comsuption", width: 200 },
     {
       field: "action",
       headerName: "Actions",
-      width: 250,
+      width: 350,
       renderCell: (params: any) => (
         <strong>
           <Button
@@ -255,7 +256,7 @@ export default function MyDevicePage() {
     );
   }
   return (
-    <Container maxWidth="lg" sx={{ margin: "24px 0", padding: "16x" }}>
+    <Container maxWidth="xl" sx={{ margin: "24px 0", padding: "16x" }}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Button
           variant="contained"
