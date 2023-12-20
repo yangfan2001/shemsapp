@@ -17,7 +17,7 @@ import {
   Radio,
   RadioGroup,
   Select,
-  SelectChangeEvent,
+  SelectChangeEvent, Box, Typography, IconButton
 } from "@mui/material";
 import { getCustomerLocation } from "../../services/location";
 import {
@@ -30,6 +30,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import EnergyBarChart from "../../components/EnergyBarChart";
 import { useLocation, useNavigate } from "react-router-dom";
 import LocationDeviceTypeChart from "../../components/chart/LocationDeviceTypePieChart";
+import OtherLocationCompareChart from "../../components/chart/OtherLocationCompareChart";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 function LocationEnergyPage() {
   const navigate = useNavigate();
@@ -244,16 +246,37 @@ function LocationEnergyPage() {
           />
         </Grid>
       </Grid>
-      <Grid xs={3} justifyContent="center" alignItems="center" display="flex">
-        <Button
-          onClick={() => {
-            navigate("/location");
-          }}
-          variant="contained"
+
+      <Grid container spacing={2} padding={2}>
+        <Grid item xs={8}  alignItems="center">
+          <Box textAlign="center">
+            <OtherLocationCompareChart location_id={displayLocation ? displayLocation : null} start={displayStart} end={displayEnd} />
+
+            <Typography
+              variant="subtitle1"
+              gutterBottom
+              sx={{ color: "gray" }}
+            >
+                Energy Cost Comparison: Current Location vs Similar-sized Locations ($)
+            </Typography>
+          </Box>
+        </Grid>
+
+       <Grid item xs={4} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+        <IconButton
+          onClick={() => navigate("/location")}
+          color="primary"
+          aria-label="go back"
+          size="large"
+          style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginRight: 20}}
         >
-          Go Back To Location Page
-        </Button>
+          <ArrowBackIcon />
+          <Typography variant="button" style={{ marginLeft: 8 }}>Go Back To Location Page</Typography>
+        </IconButton>
       </Grid>
+    </Grid>
+
+
     </>
   );
 }

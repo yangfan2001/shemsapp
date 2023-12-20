@@ -75,3 +75,15 @@ export const getEnergyPerDayByDeviceId = async (device_id:string,start:Date, end
         }
     });
 }
+
+
+
+export const getSimilarLocationEnergy = async (location_id:Number|null, start:Date, end:Date) => {
+    return axiosInstance.get(`${constants.ENDPOINT_ENERGY_URL}/location/similar`, {
+        params: {
+            location_id:location_id,
+            start: start.toISOString(), // Convert Date to ISO string
+            end: end.toISOString()       // Convert Date to ISO string
+        }
+    });
+}
