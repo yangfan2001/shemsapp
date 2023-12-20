@@ -104,7 +104,7 @@ export default function LocationCard(Props: Props) {
         </List>
       </Collapse>
 
-      <ListItem sx={{ backgroundColor: "#FBFBFB" }}>
+      {/* <ListItem sx={{ backgroundColor: "#FBFBFB" }}>
         <ListItemIcon>
           <OfflineBoltIcon />
         </ListItemIcon>
@@ -114,7 +114,7 @@ export default function LocationCard(Props: Props) {
             "$ " + Props.monthlyBill + " (" + Props.monthlyEnergy + " kwhs)"
           }
         />
-      </ListItem>
+      </ListItem> */}
 
       <ListItemButton onClick={handleClickInfo}>
         <ListItemIcon>

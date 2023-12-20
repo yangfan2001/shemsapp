@@ -150,8 +150,9 @@ const AccountInfoPage: React.FC = () => {
             </Grid>
           ))}
         </Grid>
-        <Grid>
+        <Grid marginTop={2}>
           <Button
+            variant={"outlined"}
             onClick={() => {
               navigate("/device");
             }}
@@ -182,8 +183,9 @@ const AccountInfoPage: React.FC = () => {
             </Grid>
           ))}
         </Grid>
-        <Grid>
+        <Grid marginTop={2}>
           <Button
+            variant={"outlined"}
             onClick={() => {
               navigate("/location");
             }}

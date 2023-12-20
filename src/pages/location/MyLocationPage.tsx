@@ -29,7 +29,7 @@ function MyLocationPage() {
 
   return (
     <>
-      <Grid container padding={2}>
+      <Grid container padding={2} justifyContent={"center"}>
         {locations.map((location: Location, index) => (
           <Paper sx={{ padding: 2, margin: "20px", width: "40vh" }}>
             <LocationCard

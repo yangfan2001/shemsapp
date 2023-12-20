@@ -6,10 +6,11 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import {Drawer, List, ListItem, ListItemText, Divider} from "@mui/material";
-import ListItemIcon from '@mui/material/ListItemIcon';
-import HomeIcon from '@mui/icons-material/Home';
-import InfoIcon from '@mui/icons-material/Info';
+import KitchenIcon from "@mui/icons-material/Kitchen";
+import { Drawer, List, ListItem, ListItemText, Divider } from "@mui/material";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import HomeIcon from "@mui/icons-material/Home";
+import InfoIcon from "@mui/icons-material/Info";
 import { useNavigate } from "react-router-dom";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -18,7 +19,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { blueGrey } from "@mui/material/colors";
 import { useSnackbar } from "../../components/SnackbarProvier";
-import BarChartIcon from '@mui/icons-material/BarChart';
+import BarChartIcon from "@mui/icons-material/BarChart";
 
 export default function NavBar() {
   const navigate = useNavigate();
@@ -28,8 +29,11 @@ export default function NavBar() {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const toggleDrawer = (open:any) => (event:any) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+  const toggleDrawer = (open: any) => (event: any) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
       return;
     }
 
@@ -43,7 +47,7 @@ export default function NavBar() {
     setOpenDialog(false);
   };
 
-  const handleMenuItemClick = (path:string) => {
+  const handleMenuItemClick = (path: string) => {
     // pre check if login
     if (sessionStorage.getItem("token") === null) {
       showSnackbar("Please login first", "error");
@@ -111,53 +115,47 @@ export default function NavBar() {
         </DialogActions>
       </Dialog>
 
-      <Drawer
-  anchor="left"
-  open={drawerOpen}
-  onClose={toggleDrawer(false)}
->
-  <Box
-    sx={{ width: 250 }}
-    role="presentation"
-    onClick={toggleDrawer(false)}
-    onKeyDown={toggleDrawer(false)}
-  >
-    <Typography variant="h6" sx={{ padding: 2 }}>
-      Menu
-    </Typography>
-    <Divider />
-    <List>
-    <ListItem onClick={() => handleMenuItemClick('/account')}>
-        <ListItemIcon>
-          <HomeIcon />
-        </ListItemIcon>
-        <ListItemText primary="Account" />
-      </ListItem>
-      <ListItem onClick={() => handleMenuItemClick('/device')}>
-        <ListItemIcon>
-          <HomeIcon />
-        </ListItemIcon>
-        <ListItemText primary="Device" />
-      </ListItem>
-      <ListItem  onClick={() => handleMenuItemClick('/location')}>
-        <ListItemIcon>
-          <InfoIcon />
-        </ListItemIcon>
-        <ListItemText primary="Location" />
-      </ListItem>
+      <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
+        <Box
+          sx={{ width: 250 }}
+          role="presentation"
+          onClick={toggleDrawer(false)}
+          onKeyDown={toggleDrawer(false)}
+        >
+          <Typography variant="h6" sx={{ padding: 2 }}>
+            Menu
+          </Typography>
+          <Divider />
+          <List>
+            <ListItem onClick={() => handleMenuItemClick("/account")}>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary="Account" />
+            </ListItem>
+            <ListItem onClick={() => handleMenuItemClick("/device")}>
+              <ListItemIcon>
+                <KitchenIcon />
+              </ListItemIcon>
+              <ListItemText primary="Device" />
+            </ListItem>
+            <ListItem onClick={() => handleMenuItemClick("/location")}>
+              <ListItemIcon>
+                <InfoIcon />
+              </ListItemIcon>
+              <ListItemText primary="Location" />
+            </ListItem>
 
-      <ListItem  onClick={() => handleMenuItemClick('/energy-info')}>
-        <ListItemIcon>
-          <BarChartIcon />
-        </ListItemIcon>
-        <ListItemText primary="Energy Information" />
-      </ListItem>
-      {/* Add more ListItems with icons here for additional pages */}
-    </List>
-  </Box>
-</Drawer>
-
-
+            <ListItem onClick={() => handleMenuItemClick("/energy-info")}>
+              <ListItemIcon>
+                <BarChartIcon />
+              </ListItemIcon>
+              <ListItemText primary="Energy Information" />
+            </ListItem>
+            {/* Add more ListItems with icons here for additional pages */}
+          </List>
+        </Box>
+      </Drawer>
     </Box>
   );
 }
