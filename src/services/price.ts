@@ -18,3 +18,12 @@ export const getCustomerPriceDeviceType = async (start:Date, end:Date) => {
         }
     });
 }
+
+export const getCustomerPricePerDay = async (start:Date, end:Date) => {
+    return axiosInstance.get(`${constants.ENDPOINT_PRICE_URL}/customer/day`, {
+        params: {
+            start: start.toISOString(), // Convert Date to ISO string
+            end: end.toISOString()       // Convert Date to ISO string
+        }
+    });
+}

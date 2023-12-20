@@ -21,10 +21,12 @@ import { useSnackbar } from "./SnackbarProvier";
 import { $TODAY } from "../constants";
 import { getEnergyPerDayByDeviceId } from "../services/energy";
 import EnergyBarChart from "./EnergyBarChart";
-import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateRange, DateRangePicker } from "@mui/x-date-pickers-pro";
-import dayjs, { Dayjs } from "dayjs";
+import {
+    DateRange,
+    DateRangePicker,
+    LocalizationProvider
+  } from "@mui/x-date-pickers-pro";import dayjs, { Dayjs } from "dayjs";
 
 interface Props {
   modelOpen: boolean;
@@ -121,7 +123,7 @@ export default function DeviceEnergyChartDialog(props: Props) {
         maxWidth={"xl"}
       >
         <DialogTitle>
-          Energy Usage In The Past Month For Device ID:{props.deviceId}
+          Energy Usage In The Past For Device ID:{props.deviceId}
         </DialogTitle>
         <DialogContent>
           <Box sx={{ width: 1000, height: 300, overflow: "hidden" }}>

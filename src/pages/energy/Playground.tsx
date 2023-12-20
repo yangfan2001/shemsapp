@@ -29,10 +29,15 @@ import DeviceTypePricePieChart from "../../components/chart/DeviceTypePricePieCh
 import BoltIcon from "@mui/icons-material/Bolt";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import TabPanel from "../../components/TabPanel";
-import DateRangeIcon from "@mui/icons-material/DateRange";
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import { getCustomerPricePerDay } from "../../services/price";
+import { useSnackbar } from "../../components/SnackbarProvier";
+import PriceBarChart from "../../components/chart/PriceBarChart";
 
 export default function Playground() {
   const [energyPerDay, setEnergyPerDay] = useState([]);
+  const [pricePerDay, setPricePerDay] = useState([]);
+  const [endDay, setEndDay] = useState($TODAY);
   const [displayEnd, setDisplayEnd] = useState<Date>($TODAY);
   const initStart: Date = new Date(
     Date.UTC(
@@ -59,7 +64,8 @@ export default function Playground() {
   );
   const [displayStart, setDisplayStart] = useState<Date>(initStart);
   const [displayMode, setDisplayMode] = React.useState<"day" | "month">("day");
-  const [tabValue, setTabValue] = React.useState("energy");
+  const [tabValue, setTabValue] = React.useState('energy');
+  const showSnackbar = useSnackbar();
 
   const handleDisplayMode = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === "day") {
@@ -81,8 +87,18 @@ export default function Playground() {
             setEnergyPerDay(res.data);
           })
           .catch((err) => {
-            alert("Wrong! Error Code: " + err.data);
+            console.log(err);
+            showSnackbar("Server Error", "error");
           });
+        
+        await getCustomerPricePerDay(displayStart, displayEnd)
+        .then((res) => {
+          setPricePerDay(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+            showSnackbar("Server Error", "error");
+        });
       }
     };
     fetchData();
@@ -255,13 +271,19 @@ export default function Playground() {
 
           <TabPanel value={tabValue} index="cost">
             <Grid container spacing={1}>
-              <Grid
-                item
-                xs={6}
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-              >
+
+
+            <Grid item xs={12} justifyContent="center" alignItems="center">
+                <Box textAlign="center">
+                  <PriceBarChart data={pricePerDay} start={displayStart} end={displayEnd} groupBy={displayMode} />
+                  <Typography variant="subtitle1" gutterBottom sx={{ color: 'gray' }}>
+                    Energy Price Bar Chart ($)
+                  </Typography>
+                </Box>
+              </Grid>
+
+
+              <Grid item xs={6} display="flex" justifyContent="center" alignItems="center">
                 <Box textAlign="center">
                   <LocationPricePieChart
                     start={displayStart}
@@ -294,7 +316,7 @@ export default function Playground() {
                     gutterBottom
                     sx={{ color: "gray" }}
                   >
-                    Location Energy Price Pie Chart ($)
+                    Device Type Energy Price Pie Chart ($)
                   </Typography>
                 </Box>
               </Grid>

@@ -18,8 +18,9 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { blueGrey } from "@mui/material/colors";
 import { useSnackbar } from "../../components/SnackbarProvier";
+import BarChartIcon from '@mui/icons-material/BarChart';
 
-export default function ButtonAppBar() {
+export default function NavBar() {
   const navigate = useNavigate();
   const showSnackbar = useSnackbar();
   const firstName = sessionStorage.getItem("email");
@@ -143,6 +144,13 @@ export default function ButtonAppBar() {
           <InfoIcon />
         </ListItemIcon>
         <ListItemText primary="Location" />
+      </ListItem>
+
+      <ListItem  onClick={() => handleMenuItemClick('/energy-info')}>
+        <ListItemIcon>
+          <BarChartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Energy Information" />
       </ListItem>
       {/* Add more ListItems with icons here for additional pages */}
     </List>

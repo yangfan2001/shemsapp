@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, Legend, Text } from 'recharts';
 import { getCustomerPriceDeviceType } from '../../services/price';
 interface DataItem {
     name: string;
@@ -33,13 +33,13 @@ export default function DeviceTypePricePieChart(props: Props) {
         fetchData();
     }, [props.start,props.end]);
     return (
-        <PieChart width={400} height={300}>
+        <PieChart width={400} height={320}>
             <Pie
                 dataKey="value"
                 isAnimationActive={false}
                 data={data}
                 cx={200}
-                cy={100}
+                cy={150}
                 outerRadius={100}
                 fill="#8884d8"
                 label
@@ -49,6 +49,7 @@ export default function DeviceTypePricePieChart(props: Props) {
                 ))}
             </Pie>
             <Tooltip />
+            
             <Legend />
         </PieChart>
     );
