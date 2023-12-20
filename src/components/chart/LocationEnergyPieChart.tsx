@@ -34,7 +34,7 @@ export default function LocationEnergyPieChart(props: Props) {
         fetchData();
     }, [props.start,props.end]);
     return (
-        <PieChart width={400} height={320}>
+        <PieChart width={400} height={370}>
             <Pie
                 dataKey="value"
                 isAnimationActive={false}
