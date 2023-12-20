@@ -131,7 +131,7 @@ export default function DeviceEventDialog(props: Props) {
           >
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                value={dayjs($TODAY)}
+                value={dayjs(date)}
                 onChange={(newValue) => handleSet(newValue)}
               />
             </LocalizationProvider>
