@@ -1,5 +1,6 @@
 import axiosInstance from "./axiosConfig";
 import constants from "../constants";
+import axios from "axios";
 
 export const getAllDevices = async () => {
   return axiosInstance.get(`${constants.ENDPOINT_DEVICE_URL}/all`);
@@ -28,4 +29,12 @@ export const updateDevice = async (device_id:string,tag:string) => {
         device_id,
         tag
     });
+}
+
+export const getDeviceEvent =async (device_id:number, date:Date) => {
+    const params = {
+        device_id: device_id,
+        date:date
+    }
+    return axiosInstance.get(`${constants.ENDPOINT_DEVICE_URL}/events`, {params:params})
 }
