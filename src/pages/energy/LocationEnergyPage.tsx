@@ -78,6 +78,9 @@ function LocationEnergyPage() {
 
   const handleSelectLocation = (event: SelectChangeEvent) => {
     setDisplayLocation(Number(event.target.value));
+    navigate("/energy/location", {
+      state: { locationID: Number(event.target.value) },
+    });
     // console.log(displayLocation);
     const filterData = () => {
       energyLocationDay.map((item) => {
